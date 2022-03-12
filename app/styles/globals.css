@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Jangkuy";
+  src: local("Jangkuy"), url("../public/fonts/jangkuy.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: local("Montserrat"), url("../public/fonts/mont.ttf") format("opentype");
+}
+
+@font-face {
+  font-family: "Scratchy";
+  src: local("Scratchy"), url("../public/fonts/Scratchy.ttf") format("opentype");
+}
+
+@font-face {
+  font-family: "MontserratL";
+  src: local("MontserratL"),
+    url("../public/fonts/Montserrat-Thin.ttf") format("opentype");
+}
+
+@layer utilities {
+  @variants responsive {
+    .text-shadow-lg {
+      text-shadow: 2px 2px 4px rgba(40, 114, 143, 0.25);
+    }
+  }
+}
+
+@layer base {
+  h1 {
+    @apply text-4xl;
+    font-weight: bold;
+    font-family: Jangkuy, serif;
+  }
+  h2 {
+    @apply text-xl;
+    font-weight: bold;
+    font-family: Jangkuy, serif;
+  }
+  @media (min-width: 768px) {
+    h2 {
+      @apply text-2xl;
+    }
+  }
+}
+.input-lg {
+  height: 3.5rem;
+}
+
+.spin-button-none::-webkit-outer-spin-button,
+.spin-button-none::-webkit-inner-spin-button {
+  appearance: none;
+}
+
+.wallet-adapter-button .wallet-adapter-button-trigger {
+  background-color: red !important;
+  font-size: 14px !important;
+}
+.wallet-adapter-button .wallet-adapter-button-start-icon {
+  margin-right: 5px;
+}
+
+@media (min-width: 768px) {
+  .Toastify__toast-container--top-center {
+    top: 4em !important;
+  }
+}
+.Toastify__toast-container--top-center .Toastify__toast-theme--dark {
+  background-color: #181830;
+}
+
+#__next
+  > div
+  > main
+  > div
+  > div.text-center.hero-content.mx-auto.block
+  > div
+  > div.border-primary.align-middle
+  > div
+  > div.artboard.mx-8.mt-4.bg-sky-900\/\[0\.9\].phone-3.artboard-demo.px-4
+  > div.navbar.pb-5.shadow-xs.bg-transparent.text-neutral-content.rounded-box.relative.min-w-full.justify-center
+  > div
+  > div.btn.gap-4.m-0.p-0.bg-transparent.hover\:bg-transparent.border-0.w-auto.text-sm
+  > button {
+  font-size: 14px !important;
+}
+
+#__next
+  > div
+  > main
+  > div
+  > div.text-center.hero-content.mx-auto.block
+  > div
+  > div.border-primary.align-middle
+  > div
+  > div.artboard.mx-8.mt-4.bg-sky-900\/\[0\.9\].phone-3.artboard-demo.px-4
+  > div.navbar.pb-5.shadow-xs.bg-transparent.text-neutral-content.rounded-box.relative.min-w-full.justify-center
+  > div
+  > div:nth-child(2)
+  > button {
+  font-size: 14px !important;
+}
