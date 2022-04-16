@@ -1,4 +1,4 @@
-import {FC} from "react";
+import React, {FC} from "react";
 import {useAnchorWallet} from "@solana/wallet-adapter-react";
 import WalletMultiButtonStyled from "./WalletMultiButtonStyled";
 

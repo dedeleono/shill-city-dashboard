@@ -15,7 +15,7 @@ export default function LpSummary() {
     let totalIssuedShell = null;
     let totalLiquidity = null;
     let yourLiquidity = null;
-    if(!!psdnStats?.trtnAmount) {
+    if(psdnStats?.trtnAmount) {
         const totalTrtn = (psdnStats.trtnAmount as any / 1e6);
         const totalUsdc = (psdnStats.usdcAmount as any / 1e6);
         totalLiquidity = totalTrtn * psdnRatio  + totalUsdc;
