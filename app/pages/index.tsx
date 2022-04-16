@@ -14,6 +14,7 @@ import useLPStore from "../hooks/useLPStore";
 import LpSummary from "../components/LpSummary";
 import usePfpGameStore from "../hooks/usePfpGameStore";
 import PfpGameSummary from "../components/PfpGameSummary";
+import ConnectDialog from "../components/shared/ConnectDialog";
 
 export default function Home() {
     const wallet = useAnchorWallet();
@@ -129,43 +130,51 @@ export default function Home() {
                             <ShillCityReport />
                         </div>
                     </div>
-                    <div className="basis-2/3 overflow-visible bg-primary-content bg-opacity-20 rounded rounded-2xl p-5">
-                        <div className="font-scratchy text-5xl leading-none">
-                            Your Collection
+                    {!wallet?.publicKey ? (
+                        <div className="basis-2/3">
+                            <ConnectDialog title="Connect your wallet " />
                         </div>
-                        <div className="grid gap-3 pt-5 grid-cols-2 md:grid-cols-3">
-                            {shantiesStats?.stakedNfts && (
-                                <CollectionStack
-                                    unStakedNfts={shantiesStats.unStakedNfts}
-                                    stakedNfts={shantiesStats.stakedNfts}
-                                    name="Shanties"
-                                    url="https://staking.shill-city.com/"
-                                    placeholderImage={"/images/placeholder-shanties.png"}
-                                    description="A collection of 3,333 gamified NFTs with a membership into DeFi style reward yielding gains. Stake Shanties and earn Triton($TRTN) and LP your tokens in the Poseidon Tide Pool."
-                                />
-                            )}
-                            {petsStats?.stakedNfts && (
-                                <CollectionStack
-                                    unStakedNfts={petsStats.unStakedNfts}
-                                    stakedNfts={petsStats.stakedNfts}
-                                    name="Pets"
-                                    url="https://pets.shill-city.com/"
-                                    placeholderImage={"/images/placeholder-pets.png"}
-                                    description="A collection of 1000 Pet NFTs that when staked at the Pet Palace earns $TRTN. A 'stacking' feature offers upto 4x yield multipliers."
-                                />
-                            )}
-                            {pfpStats?.stakedNfts && (
-                                <CollectionStack
-                                    unStakedNfts={pfpStats.unStakedNfts}
-                                    stakedNfts={pfpStats.stakedNfts}
-                                    name="Citizens"
-                                    url="https://citizens.shill-city.com/"
-                                    placeholderImage={"/images/placeholder-citizens.png"}
-                                    description="A deflationary collection of 6666 Crime lords fighting for control of the synthesized krill trade. Build your gang and send them on missions through our P2E Gamefied Staking platform."
-                                />
-                            )}
+                    ) : (
+                        <div className="basis-2/3 overflow-visible bg-primary-content bg-opacity-20 rounded rounded-2xl p-5">
+                            <div className="font-scratchy text-5xl leading-none">
+                                Your Collection
+                            </div>
+                            <div className="grid gap-3 pt-5 grid-cols-2 md:grid-cols-3">
+                                {shantiesStats?.stakedNfts && (
+                                    <CollectionStack
+                                        unStakedNfts={shantiesStats.unStakedNfts}
+                                        stakedNfts={shantiesStats.stakedNfts}
+                                        name="Shanties"
+                                        url="https://staking.shill-city.com/"
+                                        placeholderImage={"/images/placeholder-shanties.png"}
+                                        description="A collection of 3,333 gamified NFTs with a membership into DeFi style reward yielding gains. Stake Shanties and earn Triton($TRTN) and LP your tokens in the Poseidon Tide Pool."
+                                    />
+                                )}
+                                {petsStats?.stakedNfts && (
+                                    <CollectionStack
+                                        unStakedNfts={petsStats.unStakedNfts}
+                                        stakedNfts={petsStats.stakedNfts}
+                                        name="Pets"
+                                        url="https://pets.shill-city.com/"
+                                        placeholderImage={"/images/placeholder-pets.png"}
+                                        description="A collection of 1000 Pet NFTs that when staked at the Pet Palace earns $TRTN. A 'stacking' feature offers upto 4x yield multipliers."
+                                    />
+                                )}
+                                {pfpStats?.stakedNfts && (
+                                    <CollectionStack
+                                        unStakedNfts={pfpStats.unStakedNfts}
+                                        stakedNfts={pfpStats.stakedNfts}
+                                        name="Citizens"
+                                        url="https://citizens.shill-city.com/"
+                                        placeholderImage={"/images/placeholder-citizens.png"}
+                                        description="A deflationary collection of 6666 Crime lords fighting for control of the synthesized krill trade. Build your gang and send them on missions through our P2E Gamefied Staking platform."
+                                    />
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    )}
+
+
                 </div>
                 <div className="flex gap-8 flex-col lg:flex-row pb-10 md:pt-6 ">
                     <a
