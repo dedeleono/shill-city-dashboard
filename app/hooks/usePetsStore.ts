@@ -11,7 +11,7 @@ import { AnchorWallet } from "@solana/wallet-adapter-react";
 import {getTrtnToken} from "../utils/token";
 
 import hashTable from "../lib/hash_table/pets_hash_table.json";
-import legendariesHashTable from "../lib/hash_table/pfp_legendaries_hash_table.json";
+import legendariesHashTable from "../lib/hash_table/pets_legendaries_hash_table.json";
 import NftsData from "../utils/nftsData";
 import {toast} from "react-toastify";
 import {chunks, timeout} from "../utils/common";
