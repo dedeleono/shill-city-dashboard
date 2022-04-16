@@ -84,7 +84,7 @@ export default function Home() {
             }}
             className="w-screen"
         >
-            <Navigation activeId="old-atlantis" />
+            <Navigation activeId="" />
 
             <div
                 style={{ backgroundImage: `url(${WavesBg.src})` }}
