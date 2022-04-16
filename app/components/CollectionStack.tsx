@@ -11,6 +11,11 @@ interface CollectionStackProps {
     stakedNfts: [
         {
             image: string,
+            stakeAccount: {
+                account : {
+                    stakeAmount?:number,
+                },
+            },
         }
     ],
     unStakedNfts: [
@@ -21,7 +26,7 @@ interface CollectionStackProps {
 }
 
 const CollectionStack :FC<CollectionStackProps> = ({name,url,placeholderImage,description, stakedNfts, unStakedNfts}) => {
-    const nfts = stakedNfts.concat(unStakedNfts);
+    const nfts = [...stakedNfts, ...unStakedNfts];
     const [imageLoaded, setImageLoaded] = useState(false);
     let coverImage;
     let thumbImages: any[] = [];
@@ -31,6 +36,22 @@ const CollectionStack :FC<CollectionStackProps> = ({name,url,placeholderImage,de
     if(nfts.length > 1) {
         thumbImages = nfts.slice(1,4).map(_nft => _nft.image);
     }
+    if(stakedNfts &&  stakedNfts[0] && stakedNfts[0].stakeAccount.account.stakeAmount) {
+
+    }
+    let totalStaked = 0;
+    if(stakedNfts[0] && stakedNfts[0].stakeAccount.account.stakeAmount) {
+        // Needed for pets
+        stakedNfts.forEach((stake) => {
+            totalStaked += stake.stakeAccount.account.stakeAmount || 1
+        });
+    } else {
+        totalStaked = stakedNfts.length;
+    }
+
+    const totalNfts = unStakedNfts.length + totalStaked;
+
+
     return (
             <a href={url} className="transition-all hover:scale-105">
                 <Tooltip
@@ -82,7 +103,7 @@ const CollectionStack :FC<CollectionStackProps> = ({name,url,placeholderImage,de
                                 </div>
                             )}
                             <div className={`text-sm opacity-70`}>
-                                {stakedNfts.length}/{nfts.length}{' '}staked
+                                {totalStaked}/{totalNfts}{' '}staked
                             </div>
                         </div>
                     </div>
