@@ -15,7 +15,7 @@ export default function ShillCityReport() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`https://game.shill-city.com/api/stats`, {
+                const response = await fetch(`/api/pfp-game/stats`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"

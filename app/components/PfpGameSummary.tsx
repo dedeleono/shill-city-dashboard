@@ -21,12 +21,11 @@ export default function PfpGameSummary() {
                     className="-m-5 -mx-14 md:-mx-11 mt-4 md:max-w-[115%]  w-96"
                     src="/images/placeholder-old-atlanties-gang.png"
                 />
-                <a
-                    href="https://game.shill-city.com/"
-                    className="absolute btn btn-accent right-5 top-1/2"
+                <div
+                    className="absolute btn btn-accent right-5 top-1/2  cursor-pointer"
                 >
                     Play now
-                </a>
+                </div>
             </div>
         </div>
     );

@@ -89,12 +89,11 @@ export default function LpSummary() {
                 </div>
             </div>
             <div className="flex w-full place-content-start">
-                <a
-                    href="https://game.shill-city.com/"
-                    className=" btn btn-accent"
+                <div
+                    className=" btn btn-accent cursor-pointer"
                 >
                     Start trading
-                </a>
+                </div>
             </div>
 
         </div>

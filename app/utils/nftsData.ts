@@ -89,9 +89,14 @@ export default class NftsData {
             (stake) => stake.account.withdrawn === false);
         // console.log("----------stakedNfts",stakedNfts);
         const stake_spls = await Promise.all(stakedNfts.map(async (nft_account) => {
+            const keys = [nft_account.publicKey.toBuffer()];
+            if(nft_account.account.mints) {
+                // Needed for pets
+                keys.push(nft_account.account.mints[0].toBuffer());
+            }
             const [stake_spl, _stakeBump] =
                 await anchor.web3.PublicKey.findProgramAddress(
-                    [nft_account.publicKey.toBuffer()],
+                    keys,
                     this.program.programId
                 );
             return stake_spl.toString();
@@ -127,7 +132,14 @@ export default class NftsData {
         const nftsData = await this.getNftsData(mints);
         // append stakedNfts data before returning
         return nftsData.map(nftData => {
-            const stakeAccount = stakedNfts.find(stakedNft => nftData.mint === stakedNft.account.mint.toString());
+            const stakeAccount = stakedNfts.find(stakedNft => {
+                if(stakedNft.account.mints) {
+                    // Needed for pets
+                    return nftData.mint === stakedNft.account.mints[0].toString();
+                }
+                return nftData.mint === stakedNft.account.mint.toString()
+
+            });
             let estimateRewards = 0;
             let isLocked = false;
             let lockMultiplier = null;
