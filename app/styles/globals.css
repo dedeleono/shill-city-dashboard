@@ -1,3 +1,5 @@
+@import "rc-tooltip/assets/bootstrap_white.css";
+@import "react-toastify/dist/ReactToastify.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -65,6 +67,7 @@
   margin-right: 5px;
 }
 
+/* Toastify overwrites */
 @media (min-width: 768px) {
   .Toastify__toast-container--top-center {
     top: 4em !important;
@@ -73,6 +76,26 @@
 .Toastify__toast-container--top-center .Toastify__toast-theme--dark {
   background-color: #181830;
 }
+
+/* rc-tooltip overwrites */
+.rc-tooltip {
+  opacity: 1;
+  max-width: 350px;
+}
+.rc-tooltip-placement-top .rc-tooltip-arrow, .rc-tooltip-placement-topLeft .rc-tooltip-arrow, .rc-tooltip-placement-topRight .rc-tooltip-arrow{
+  border-top-color: #181830;
+}
+
+.rc-tooltip-inner {
+  @apply opacity-90;
+  @apply font-montserrat;
+  @apply p-4;
+  @apply rounded-lg;
+  @apply bg-neutral;
+  @apply text-neutral-content;
+  border: none;
+}
+
 
 #__next
   > div

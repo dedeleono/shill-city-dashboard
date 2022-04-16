@@ -1,0 +1,849 @@
+{
+  "version": "0.1.0",
+  "name": "nft_staker",
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [
+        {
+          "name": "jollyranch",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "recieverSplAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "jollyBump",
+          "type": "u8"
+        },
+        {
+          "name": "splBump",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "fundRanch",
+      "accounts": [
+        {
+          "name": "jollyranch",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "senderSplAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "recieverSplAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "stakeNft",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "stake",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "senderSplAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "recieverSplAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "splBump",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "redeemRewards",
+      "accounts": [
+        {
+          "name": "stake",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "jollyranch",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "senderSplAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "recieverSplAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "redeemNft",
+      "accounts": [
+        {
+          "name": "stake",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "jollyranch",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "senderSplAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "recieverSplAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "senderTritonAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "recieverTritonAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "nft",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "oldAtlantis",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "gang",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "jollyranch",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "trtnAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authTrtnAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "slotHashes",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "blessing",
+          "type": "bool"
+        },
+        {
+          "name": "member",
+          "type": {
+            "defined": "Member"
+          }
+        },
+        {
+          "name": "leader",
+          "type": {
+            "defined": "Leader"
+          }
+        }
+      ]
+    },
+    {
+      "name": "oracle",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "gang",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "seed",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "fundPet",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "pet",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "senderSplAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "recieverSplAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "petBump",
+          "type": "u8"
+        },
+        {
+          "name": "rarity",
+          "type": "u8"
+        },
+        {
+          "name": "prize",
+          "type": {
+            "defined": "Prize"
+          }
+        }
+      ]
+    },
+    {
+      "name": "redeemPet",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "gang",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "prize",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "prizeNftAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "recieverNftAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "nft",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "jollyranch",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "senderSplAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "recieverSplAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "fixPet",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "pet",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Pet",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "mint",
+            "type": "publicKey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "withdrawn",
+            "type": "bool"
+          },
+          {
+            "name": "rarity",
+            "type": "u8"
+          },
+          {
+            "name": "prize",
+            "type": {
+              "defined": "Prize"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Gang",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "id",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "seed",
+            "type": "u64"
+          },
+          {
+            "name": "chanceCommon",
+            "type": "u32"
+          },
+          {
+            "name": "chanceRare",
+            "type": "u32"
+          },
+          {
+            "name": "chanceLegendary",
+            "type": "u32"
+          },
+          {
+            "name": "result",
+            "type": "u32"
+          },
+          {
+            "name": "withdrawn",
+            "type": "bool"
+          },
+          {
+            "name": "oracle",
+            "type": "bool"
+          },
+          {
+            "name": "blessing",
+            "type": "bool"
+          },
+          {
+            "name": "member",
+            "type": {
+              "defined": "Member"
+            }
+          },
+          {
+            "name": "leader",
+            "type": {
+              "defined": "Leader"
+            }
+          },
+          {
+            "name": "prize",
+            "type": {
+              "defined": "Prize"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "JollyRanch",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "splBump",
+            "type": "u8"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "amountRedeemed",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Stake",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "mint",
+            "type": "publicKey"
+          },
+          {
+            "name": "splBump",
+            "type": "u8"
+          },
+          {
+            "name": "startDate",
+            "type": "i64"
+          },
+          {
+            "name": "endDate",
+            "type": "i64"
+          },
+          {
+            "name": "amountRedeemed",
+            "type": "u64"
+          },
+          {
+            "name": "amountOwed",
+            "type": "u64"
+          },
+          {
+            "name": "withdrawn",
+            "type": "bool"
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "Member",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "associate",
+            "type": "u32"
+          },
+          {
+            "name": "soldier",
+            "type": "u32"
+          },
+          {
+            "name": "captain",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Leader",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "shillCityBlinder",
+            "type": "bool"
+          },
+          {
+            "name": "aoShunTriad",
+            "type": "bool"
+          },
+          {
+            "name": "trenchTownMafia",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Prize",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "smallBag",
+            "type": "bool"
+          },
+          {
+            "name": "largeBag",
+            "type": "bool"
+          },
+          {
+            "name": "treasureChest",
+            "type": "bool"
+          },
+          {
+            "name": "beastHeart",
+            "type": "bool"
+          },
+          {
+            "name": "poseidonCrystal",
+            "type": "bool"
+          },
+          {
+            "name": "godStone",
+            "type": "bool"
+          },
+          {
+            "name": "spellBook",
+            "type": "bool"
+          },
+          {
+            "name": "godSkinSpellBook",
+            "type": "bool"
+          },
+          {
+            "name": "godsBlessing",
+            "type": "bool"
+          }
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "name": "WarPartyRoll",
+      "fields": [
+        {
+          "name": "key",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "OutOfFunds",
+      "msg": "The staking contract is out of funds."
+    },
+    {
+      "code": 6001,
+      "name": "NotEnoughTriton",
+      "msg": "Not enough triton sent"
+    },
+    {
+      "code": 6002,
+      "name": "TooMuchTriton",
+      "msg": "Too much triton sent"
+    },
+    {
+      "code": 6003,
+      "name": "FailedToParseItems",
+      "msg": "Ther was in issue parsing the party members."
+    },
+    {
+      "code": 6004,
+      "name": "IncorrectSlotHashesPubkey",
+      "msg": "Tried to lie about slothhashes program."
+    },
+    {
+      "code": 6005,
+      "name": "OnlyOracleCanUpdate",
+      "msg": "Only the oracle can update rolls."
+    },
+    {
+      "code": 6006,
+      "name": "OracleHasAlreadySpoken",
+      "msg": "The oracle already rolled."
+    },
+    {
+      "code": 6007,
+      "name": "PetAlreadyRedeemed",
+      "msg": "This pet was already redeemed."
+    },
+    {
+      "code": 6008,
+      "name": "BreedAlreadyWithdrawn",
+      "msg": "You already checked on this war party."
+    },
+    {
+      "code": 6009,
+      "name": "OracleHasNotSpoken",
+      "msg": "The oracle hasn't rolled your party yet."
+    },
+    {
+      "code": 6010,
+      "name": "SuppliedWrongItemRarity",
+      "msg": "You tried to redeem the wrong item type."
+    },
+    {
+      "code": 6011,
+      "name": "OnlyGodCanDoThis",
+      "msg": "Only God can do this."
+    }
+  ],
+  "metadata": {
+    "address": "EdYp85RTTNJJAFCXuCPc1uoSJuchchxEXr9W39tmktFu"
+  }
+}
