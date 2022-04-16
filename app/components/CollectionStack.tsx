@@ -36,9 +36,7 @@ const CollectionStack :FC<CollectionStackProps> = ({name,url,placeholderImage,de
     if(nfts.length > 1) {
         thumbImages = nfts.slice(1,4).map(_nft => _nft.image);
     }
-    if(stakedNfts &&  stakedNfts[0] && stakedNfts[0].stakeAccount.account.stakeAmount) {
 
-    }
     let totalStaked = 0;
     if(stakedNfts[0] && stakedNfts[0].stakeAccount.account.stakeAmount) {
         // Needed for pets
