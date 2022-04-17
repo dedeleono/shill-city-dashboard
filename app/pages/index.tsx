@@ -80,7 +80,7 @@ export default function Home() {
             }}
             className="w-screen"
         >
-            <Navigation activeId="" />
+            <Navigation activeId="home" />
 
             <div
                 style={{ backgroundImage: `url(${WavesBg.src})` }}
