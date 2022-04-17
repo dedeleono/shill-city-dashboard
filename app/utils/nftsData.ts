@@ -166,6 +166,13 @@ export default class NftsData {
                     if(lockMultiplier) {
                         redemptionRate = redemptionRate * lockMultiplier.multiplier;
                     }
+                    if(stakeAccount.account.stakeAmount) {
+                        // Needed for pets
+                        const groupMultiplier = this.groupMultipliers.find(_groupMultiplier => _groupMultiplier.group === stakeAccount.account.stakeAmount);
+                        if(groupMultiplier) {
+                            redemptionRate = redemptionRate * (nftData.isLegendary? groupMultiplier.multiplierLegendary : groupMultiplier.multiplier);
+                        }
+                    }
                     const currDate = new Date().getTime() / 1000;
                     const daysElapsed =
                         Math.abs(currDate - stakeAccount.account.startDate) /

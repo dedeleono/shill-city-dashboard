@@ -59,7 +59,7 @@ const usePetsStore = create<UsePetsStore>((set, get) => ({
     getStats: async () => {
         const program = get().state.program;
         // TODO calculate PETS_GROUP_MULTIPLIERS
-        const nfts = new NftsData(program,hashTable,legendariesHashTable, 4, 10, [], PETS_GROUP_MULTIPLIERS);
+        const nfts = new NftsData(program,hashTable,legendariesHashTable, 1, 10, [], PETS_GROUP_MULTIPLIERS);
         const totalStaked = await nfts.getTotalStakedNfts();
         const stakedNfts = await nfts.getWalletStakedNfts();
         const unStakedNfts = await nfts.getWalletUnStakedNfts();
