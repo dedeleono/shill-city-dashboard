@@ -44,9 +44,9 @@ export default function PfpGameSummary() {
                     </div>
                 </div>
             </div>
-            <div className="relative self-stretch">
+            <div className="relative items-end place-content-end content-end flex text-right">
                 <img
-                    className="-m-5 -mx-14 md:-mx-11 mt-4 md:max-w-[115%]  w-96"
+                    className="-m-5 -mx-8 md:-mx-11 -mt-8 md:max-w-[80%]"
                     src="/images/placeholder-old-atlanties-gang.png"
                 />
             </div>
