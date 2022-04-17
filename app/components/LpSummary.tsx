@@ -106,7 +106,7 @@ export default function LpSummary() {
                     </div>
                 </div>
             </div>
-            <ChartTrtnUsdcDynamic />
+            <ChartTrtnUsdcDynamic className={"w-full h-36"} />
         </div>
     );
 }
