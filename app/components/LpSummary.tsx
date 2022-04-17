@@ -2,9 +2,11 @@ import React  from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import {getNumber} from "../utils/format";
 import useLPStore from "../hooks/useLPStore";
+import dynamic from 'next/dynamic';
 import CountUpValue from "./shared/CountUpValue";
 import Tooltip from "rc-tooltip";
 import {AiOutlineQuestionCircle} from "react-icons/ai";
+const ChartTrtnUsdcDynamic = dynamic(() => import('./lp/ChartTrtnUsdc'), { ssr: false });
 
 export default function LpSummary() {
     const psdnStats = useLPStore((state => state.psdnStats));
@@ -104,6 +106,7 @@ export default function LpSummary() {
                     </div>
                 </div>
             </div>
+            <ChartTrtnUsdcDynamic />
         </div>
     );
 }

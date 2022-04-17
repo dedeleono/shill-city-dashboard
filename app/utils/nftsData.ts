@@ -6,7 +6,6 @@ import {AccountInfo, ConfirmOptions, Connection} from "@solana/web3.js";
 import axios from "axios";
 import {programs} from "@metaplex/js";
 import {TOKEN_PROGRAM_ID} from "@solana/spl-token";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import RelativeTime from '@yaireo/relative-time'
 

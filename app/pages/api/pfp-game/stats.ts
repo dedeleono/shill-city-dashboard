@@ -32,7 +32,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const wallet = new Wallet(Keypair.generate());
   const provider = new Provider(connection, wallet, opts.preflightCommitment);

@@ -13,7 +13,7 @@ export default function PfpGameSummary() {
         }
     }, [pfpGameStats])
     return (
-        <div>
+        <div className="flex-grow flex-row h-full">
             <div className="flex">
                 <div className="font-scratchy text-5xl leading-none mb-2 flex-grow">
                     The Empire of Old Atlantis
@@ -44,7 +44,7 @@ export default function PfpGameSummary() {
                     </div>
                 </div>
             </div>
-            <div className="relative">
+            <div className="relative self-stretch">
                 <img
                     className="-m-5 -mx-14 md:-mx-11 mt-4 md:max-w-[115%]  w-96"
                     src="/images/placeholder-old-atlanties-gang.png"
