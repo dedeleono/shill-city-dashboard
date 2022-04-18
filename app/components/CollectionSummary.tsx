@@ -15,6 +15,9 @@ export default function CollectionSummary() {
     const unStakedShanties = useShantiesStore((state) => state.stats?.unStakedNfts);
     const unStakedPets = usePetsStore((state) => state.stats?.unStakedNfts);
     const psdnRatio = useLPStore((state => state.psdnRatio));
+    const redeemPfpRewards = usePfpStore((state) => state.redeemAllRewards);
+    const redeemPetsRewards = usePetsStore((state) => state.redeemAllRewards);
+    const redeemShantiesRewards = useShantiesStore((state) => state.redeemAllRewards);
     const [dailyYield,setDailyYield] = useState(0);
     useEffect(() => {
         if(stakedPfps && stakedShanties && stakedPets) {
@@ -26,6 +29,17 @@ export default function CollectionSummary() {
             setDailyYield(_dailyYield);
         }
     }, [stakedPfps, stakedShanties,stakedPets])
+
+    async function handleOnPfpRedeem() {
+        return await redeemPfpRewards();
+    }
+    async function handleOnPetsRedeem() {
+        return await redeemPetsRewards();
+    }
+    async function handleOnShantiesRedeem() {
+        return await redeemShantiesRewards();
+    }
+
     return (
         <div>
             <div className="flex">
@@ -55,6 +69,7 @@ export default function CollectionSummary() {
                     <CollectionStack
                         unStakedNfts={unStakedShanties}
                         stakedNfts={stakedShanties}
+                        onRedeem={handleOnShantiesRedeem}
                         name="Shanties"
                         url="https://staking.shill-city.com/"
                         placeholderImage={"/images/placeholder-shanties.png"}
@@ -65,6 +80,7 @@ export default function CollectionSummary() {
                     <CollectionStack
                         unStakedNfts={unStakedPets}
                         stakedNfts={stakedPets}
+                        onRedeem={handleOnPetsRedeem}
                         name="Pets"
                         url="https://pets.shill-city.com/"
                         placeholderImage={"/images/placeholder-pets.png"}
@@ -75,6 +91,7 @@ export default function CollectionSummary() {
                     <CollectionStack
                         unStakedNfts={unStakedPfps}
                         stakedNfts={stakedPfps}
+                        onRedeem={handleOnPfpRedeem}
                         name="Citizens"
                         url="https://citizens.shill-city.com/"
                         placeholderImage={"/images/placeholder-citizens.png"}

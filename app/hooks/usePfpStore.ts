@@ -50,7 +50,7 @@ interface UsePfpStore {
     unstakeAllNFTs:() => Promise<boolean>;
     unStakeNFTs:(unStakeNfts: UnStakeNft[]) => Promise<boolean>;
     redeemRewards:(stakePubKey: PublicKey) => Promise<boolean>;
-    redeemAllRewards:(redeemAllChunk: number) => Promise<boolean>;
+    redeemAllRewards:() => Promise<boolean>;
 }
 
 const usePfpStore = create<UsePfpStore>((set, get) => ({
@@ -275,7 +275,8 @@ const usePfpStore = create<UsePfpStore>((set, get) => ({
             return false;
         }
     },
-    redeemAllRewards: async (redeemAllChunk: number) => {
+    redeemAllRewards: async () => {
+        const redeemAllChunk = 10;
         const _state = get().state;
         const _stakedMints = get().stats.stakedNfts;
         let tx;

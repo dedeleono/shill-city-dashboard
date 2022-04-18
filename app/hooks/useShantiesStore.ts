@@ -43,7 +43,7 @@ interface UseShantiesStore {
     stakeNFT:(nftPubKey: PublicKey) => Promise<boolean>;
     unStakeNFT:(stakePubKey: PublicKey, nftPubKey: PublicKey) => Promise<boolean>;
     redeemRewards:(stakePubKey: PublicKey) => Promise<boolean>;
-    redeemAllRewards:(redeemAllChunk: number) => Promise<boolean>;
+    redeemAllRewards:() => Promise<boolean>;
 }
 
 const useShantiesStore = create<UseShantiesStore>((set, get) => ({
@@ -235,7 +235,8 @@ const useShantiesStore = create<UseShantiesStore>((set, get) => ({
             return false;
         }
     },
-    redeemAllRewards: async (redeemAllChunk: number) => {
+    redeemAllRewards: async () => {
+        const redeemAllChunk = 10;
         const _state = get().state;
         const _stakedMints = get().stats.stakedNfts;
         let tx;
