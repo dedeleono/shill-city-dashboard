@@ -15,16 +15,11 @@ export default function PfpGameSummary() {
     return (
         <div className="flex-grow flex-row h-full">
             <div className="flex">
-                <div className="font-scratchy text-5xl leading-none mb-2 flex-grow">
+                <a
+                    href="https://game.shill-city.com/"
+                    className="font-scratchy text-5xl leading-none mb-2 flex-grow">
                     The Empire of Old Atlantis
-                </div>
-                <div>
-                    <div
-                        className="btn btn-outline cursor-pointer"
-                    >
-                        Play now
-                    </div>
-                </div>
+                </a>
             </div>
             <div className="card gap-6 flex flex-row items-center pb-2">
                 <div className="-space-x-3 flex-shrink-0">
@@ -39,9 +34,18 @@ export default function PfpGameSummary() {
                 </div>
                 <div className="leading-tight">
                     <div className="opacity-50">Your collected items</div>
-                    <div className="text-xl">
-                        {collectedItems ? <CountUpValue value={collectedItems} showCents={false} /> : '-'}
+                    <div>
+                        <span className="text-xl">
+                            {collectedItems ? <CountUpValue value={collectedItems} showCents={false} /> : '-'}
+                        </span>
+                        <a
+                            href="https://game.shill-city.com/"
+                            className="btn ml-2 btn-sm btn-outline relative z-10"
+                        >
+                            Play now
+                        </a>
                     </div>
+
                 </div>
             </div>
             <div className="relative items-end place-content-end content-end flex text-right">

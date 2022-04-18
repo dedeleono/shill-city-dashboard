@@ -1,4 +1,4 @@
-import React  from 'react';
+import React, {useState} from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import {getNumber} from "../utils/format";
 import useLPStore from "../hooks/useLPStore";
@@ -13,6 +13,8 @@ export default function LpSummary() {
     const accountStats = useLPStore((state => state.accountStats));
     const psdnRatio = useLPStore((state => state.psdnRatio));
     const tideStats = useLPStore((state => state.tideStats));
+    const stakeRedeem = useLPStore((state => state.stakeRedeem));
+    const [isPending, setIsPending] = useState(false);
 
     let totalIssuedShell = null;
     let totalLiquidity = null;
@@ -42,18 +44,11 @@ export default function LpSummary() {
     }
     return (
         <div>
-            <div className="flex">
-                <div className="font-scratchy text-5xl leading-none mb-2 flex-grow">
+            <div className="flex content-center items-center ">
+                <a href="https://lp.shill-city.com" className="font-scratchy text-5xl leading-none mb-2 flex-grow">
                     Poseidon<br className="visible md:hidden" />
                     <span> Liquidity Pool</span>
-                </div>
-                <div>
-                    <div
-                        className=" btn btn-outline cursor-pointer"
-                    >
-                        Start trading
-                    </div>
-                </div>
+                </a>
             </div>
             <div className="card gap-6 flex flex-row items-center pb-2">
                 <div className="-space-x-3 flex-shrink-0">
@@ -72,6 +67,27 @@ export default function LpSummary() {
                     <div className="opacity-50">Your liquidity</div>
                     <div className="text-xl">
                         {yourLiquidity ? <CountUpValue value={yourLiquidity} prefix="$" showCents={true} /> : '-'}
+                    </div>
+                </div>
+                <div className="leading-tight">
+                    <div className="opacity-50">Your daily reward</div>
+                    <div>
+                        <span className="text-xl">
+                            {(totalStakedShell && tideStats?.walletStakedShell) ? (<span><CountUpValue value={2000 * (tideStats.walletStakedShell/totalStakedShell)} showCents={true} /> TRTN</span>) : '-'}
+                        </span>
+                        {tideStats?.walletStakedShell && (
+                            <button
+                                className={`btn ml-2 btn-sm btn-outline ${isPending ? 'loading' : ''}`}
+                                disabled={!tideStats?.walletStakedShell}
+                                onClick={async () => {
+                                    setIsPending(true);
+                                    await stakeRedeem();
+                                    setIsPending(false);
+                                }}
+                            >
+                                Harvest
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>

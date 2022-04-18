@@ -139,18 +139,16 @@ export default function Home() {
 
                 </div>
                 <div className="flex gap-8 flex-col lg:flex-row pb-10">
-                    <a
-                        href="https://lp.shill-city.com/"
-                        className="basis-1/2 bg-primary-content bg-opacity-50 rounded rounded-2xl p-5 transition-all hover:scale-105"
+                    <div
+                        className="basis-1/2 bg-primary-content bg-opacity-50 rounded rounded-2xl p-5"
                     >
                         <LpSummary />
-                    </a>
-                    <a
-                        href="https://game.shill-city.com/"
-                        className="basis-1/2 bg-primary-content bg-opacity-50 rounded rounded-2xl p-5 transition-all hover:scale-105"
+                    </div>
+                    <div
+                        className="basis-1/2 bg-primary-content bg-opacity-50 rounded rounded-2xl p-5"
                     >
                         <PfpGameSummary />
-                    </a>
+                    </div>
 
                 </div>
             </div>
