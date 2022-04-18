@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import Image from "next/image";
 import Tooltip from "rc-tooltip";
@@ -31,36 +31,42 @@ interface CollectionStackProps {
 const CollectionStack :FC<CollectionStackProps> = (
     {name,url,placeholderImage,description, stakedNfts, unStakedNfts,onRedeem}
 ) => {
-    const nfts = [...stakedNfts, ...unStakedNfts];
     const [imageLoaded, setImageLoaded] = useState(false);
     const [isRedeeming, setIsRedeeming] = useState(false);
-    let coverImage;
-    let thumbImages: any[] = [];
-    if(nfts.length) {
-        coverImage = nfts[0].image;
-    }
-    if(nfts.length > 1) {
-        thumbImages = nfts.slice(1,4).map(_nft => _nft.image);
-    }
+    const [coverImage, setCoverImage] = useState('');
+    const [thumbImages, setThumbImages] = useState([]);
+    const [totalStaked, setTotalStaked] = useState(0);
+    const [totalNfts, setTotalNfts] = useState(0);
+    const [totalRewards, setTotalRewards] = useState(0);
 
-    let totalStaked = 0;
+    useEffect(() => {
+        const nfts = [...stakedNfts, ...unStakedNfts];
+        if(nfts.length && coverImage === '') {
+            setCoverImage(nfts[Math.floor(Math.random()*nfts.length)].image);
+        }
+        if(nfts.length > 1) {
+            // @ts-ignore
+            setThumbImages(nfts.slice(1,4).map(_nft => _nft.image));
+        }
 
-    if(stakedNfts[0] && stakedNfts[0].stakeAccount.account.stakeAmount) {
-        // Needed for pets
+        let _totalStaked = 0;
+
+        if(stakedNfts[0] && stakedNfts[0].stakeAccount.account.stakeAmount) {
+            // Needed for pets
+            stakedNfts.forEach((stake) => {
+                _totalStaked += stake.stakeAccount.account.stakeAmount || 1
+            });
+        } else {
+            _totalStaked = stakedNfts.length;
+        }
+        let _totalRewards = 0;
         stakedNfts.forEach((stake) => {
-            totalStaked += stake.stakeAccount.account.stakeAmount || 1
+            _totalRewards += stake.estimateRewards
         });
-    } else {
-        totalStaked = stakedNfts.length;
-    }
-    let totalRewards = 0;
-    stakedNfts.forEach((stake) => {
-        totalRewards += stake.estimateRewards
-    });
-
-
-    const totalNfts = unStakedNfts.length + totalStaked;
-
+        setTotalRewards(_totalRewards);
+        setTotalStaked(_totalStaked);
+        setTotalNfts(unStakedNfts.length + _totalStaked);
+    }, [stakedNfts, unStakedNfts])
 
     async function handleOnRedeem() {
         setIsRedeeming(true);
