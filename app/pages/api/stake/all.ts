@@ -28,6 +28,7 @@ export default async function handler(
 ) {
   // @ts-ignore
   const authorities = [];
+  // @ts-ignore
   const wallet = new Wallet(Keypair.generate());
   const provider = new Provider(connection, wallet, opts.preflightCommitment);
   const programPfp = getPfpProgram(provider);
