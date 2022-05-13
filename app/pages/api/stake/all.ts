@@ -18,8 +18,13 @@ const connection = new anchor.web3.Connection(
     opts.preflightCommitment
 );
 
-type Data = {
+type Collection = {
   authorities: string[],
+  collection: string,
+  creator: string,
+}
+type Data = {
+  data: Collection[]
 }
 
 export default async function handler(
@@ -27,22 +32,21 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   // @ts-ignore
-  const authorities = [];
-  // @ts-ignore
   const wallet = new Wallet(Keypair.generate());
   const provider = new Provider(connection, wallet, opts.preflightCommitment);
   const programPfp = getPfpProgram(provider);
   const stakesPfp = await programPfp.account.stake.all();
-  authorities.push(...stakesPfp.filter((stake: any) => stake.account.withdrawn === false).map(stake => stake.account.authority.toString()));
 
   const programPets = getPetsProgram(provider);
   const stakesPets = await programPets.account.stake.all();
-  authorities.push(...stakesPets.filter((stake: any) => stake.account.withdrawn === false).map(stake => stake.account.authority.toString()));
 
   const programShanties = getShantiesProgram(provider);
   const stakesShanties = await programShanties.account.stake.all();
-  authorities.push(...stakesShanties.filter((stake: any) => stake.account.withdrawn === false).map(stake => stake.account.authority.toString()));
 
   res.setHeader('Cache-Control', 's-maxage=3600');
-  res.status(200).json({ authorities})
+  res.status(200).json({data: [
+      {creator: "sea shanties", collection : "citizens", authorities:stakesPfp.filter((stake) => stake.account.withdrawn === false).map(stake => stake.account.authority.toString())},
+      {creator: "sea shanties", collection : "pets", authorities:stakesPets.filter((stake) => stake.account.withdrawn === false).map(stake => stake.account.authority.toString())},
+      {creator: "sea shanties", collection : "shanties", authorities:stakesShanties.filter((stake) => stake.account.withdrawn === false).map(stake => stake.account.authority.toString())}
+    ]});
 }
