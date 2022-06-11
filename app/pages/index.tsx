@@ -17,6 +17,7 @@ import PfpGameSummary from "../components/PfpGameSummary";
 import ConnectDialog from "../components/shared/ConnectDialog";
 import CollectionSummary from "../components/CollectionSummary";
 import {RaffleType} from "../utils/raffle";
+import RaffleCard from "../components/RaffleCard";
 function useRaffles () {
     const { data, error } = useSWR(`https://raffle.shill-city.com/api/raffle/all`,(apiPath: RequestInfo) => fetch(apiPath).then(res => res.json()));
 
@@ -162,6 +163,31 @@ export default function Home() {
                         <PfpGameSummary />
                     </div>
 
+                </div>
+                <div className="bg-primary-content bg-opacity-50 rounded rounded-2xl p-5">
+                    <div className="flex">
+                        <div className="font-scratchy text-5xl leading-none grow">
+                            Latest Raffles
+                        </div>
+                        <a
+                            href="https://magiceden.io/creators/sea_shanties"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-sm btn-outline mt-2"
+                        >
+                            <span>All raffles</span>
+                        </a>
+                    </div>
+
+                    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pt-4">
+                        {raffles && raffles.slice(0,4).map(raffle =>
+                            <RaffleCard
+                                key={`raffle-${raffle.publicKey}`}
+                                raffle={raffle}
+                                onEdit={() => {return}}
+                            />
+                        )}
+                    </div>
                 </div>
             </div>
             <ToastContainer position="top-center" theme="dark" />

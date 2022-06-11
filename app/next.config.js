@@ -6,6 +6,7 @@ module.exports = {
     domains: [
       'infura-ipfs.io',
       'arweave.net',
+      'hydra-raffle.s3.amazonaws.com',
     ],
   },
 }
