@@ -29,8 +29,8 @@ function useRaffles () {
 }
 export default function Home() {
     const wallet = useAnchorWallet();
-    const {raffles, isLoading, isError} = useRaffles();
-    console.log('raffle', raffles, isLoading, isError);
+    const {raffles} = useRaffles();
+
     const getSccStats = useShillCityCapitalStore((state) => state.getSccStats);
     // shanties
     const initShantiesState = useShantiesStore((state) => state.initState);
