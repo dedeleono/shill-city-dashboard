@@ -57,7 +57,7 @@ export default function ShillCityReport() {
                 </div>
 
                 <div className="flex flex-col">
-                    <div className="mb-2">Habitats</div>
+                    <div className="mb-2">Inhabitants</div>
                     <div className="flex ml-2">
                         <div className="grow">Citizens Gen1</div>
                         <div>{pfpStats?.totalStaked}/6666</div>

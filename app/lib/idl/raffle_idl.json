@@ -1,0 +1,396 @@
+{
+  "version": "0.1.0",
+  "name": "raffle",
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [
+        {
+          "name": "rafflehouse",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "createContest",
+      "accounts": [
+        {
+          "name": "rafflehouse",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "contest",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "admin",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "totalWinners",
+          "type": "u32"
+        },
+        {
+          "name": "ticketPrice",
+          "type": "u64"
+        },
+        {
+          "name": "endDate",
+          "type": "i64"
+        },
+        {
+          "name": "splKey",
+          "type": {
+            "option": "publicKey"
+          }
+        },
+        {
+          "name": "maxTickets",
+          "type": {
+            "option": "u32"
+          }
+        }
+      ]
+    },
+    {
+      "name": "buyTicketSol",
+      "accounts": [
+        {
+          "name": "contestAdmin",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "contest",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "ticket",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "buyTicketSpl",
+      "accounts": [
+        {
+          "name": "contestAdmin",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "contest",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "ticket",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "userSplAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "adminSplAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "splMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "chooseWinner",
+      "accounts": [
+        {
+          "name": "contest",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "updatePrice",
+      "accounts": [
+        {
+          "name": "contest",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "newPrice",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "updateDate",
+      "accounts": [
+        {
+          "name": "contest",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "newDate",
+          "type": "i64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "RaffleHouse",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "solEarned",
+            "type": "u64"
+          },
+          {
+            "name": "splEarned",
+            "type": "u64"
+          },
+          {
+            "name": "contestsCreated",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Contest",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "contestIndex",
+            "type": "u64"
+          },
+          {
+            "name": "admin",
+            "type": "publicKey"
+          },
+          {
+            "name": "issuedTickets",
+            "type": "u32"
+          },
+          {
+            "name": "ticketPrice",
+            "type": "u64"
+          },
+          {
+            "name": "endDate",
+            "type": "i64"
+          },
+          {
+            "name": "winnerIndices",
+            "type": {
+              "array": ["u32", 5]
+            }
+          },
+          {
+            "name": "winnerTickets",
+            "type": {
+              "array": ["publicKey", 5]
+            }
+          },
+          {
+            "name": "totalWinners",
+            "type": "u32"
+          },
+          {
+            "name": "prizeType",
+            "type": {
+              "defined": "PrizeType"
+            }
+          },
+          {
+            "name": "isSpl",
+            "type": "bool"
+          },
+          {
+            "name": "splKey",
+            "type": {
+              "option": "publicKey"
+            }
+          },
+          {
+            "name": "maxTickets",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Ticket",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "customer",
+            "type": "publicKey"
+          },
+          {
+            "name": "contest",
+            "type": "publicKey"
+          },
+          {
+            "name": "ticketId",
+            "type": "u32"
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "PrizeType",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "nft",
+            "type": "bool"
+          },
+          {
+            "name": "whitelistDiscord",
+            "type": "bool"
+          },
+          {
+            "name": "whitelistToken",
+            "type": "bool"
+          },
+          {
+            "name": "custom",
+            "type": "bool"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "IncorrectTicketType"
+    },
+    {
+      "code": 6001,
+      "name": "ContestNotEnded"
+    },
+    {
+      "code": 6002,
+      "name": "InvalidTicketPrice"
+    },
+    {
+      "code": 6003,
+      "name": "NoTicketsSold"
+    },
+    {
+      "code": 6004,
+      "name": "InvalidWinnerAmount"
+    },
+    {
+      "code": 6005,
+      "name": "MaxTicketsReached"
+    }
+  ],
+  "metadata": {
+    "address": "9doxCrKg36r9JYGNP7tpnwMz5YSYBERRg575N7bo4gyM"
+  }
+}

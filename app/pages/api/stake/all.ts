@@ -1,10 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import {ConfirmOptions, Keypair} from "@solana/web3.js";
 import * as anchor from "@project-serum/anchor";
-import { Provider, Wallet} from "@project-serum/anchor";
-import {getPfpProgram} from "../../../utils/pfp";
-import {getPetsProgram} from "../../../utils/pets";
-import {getShantiesProgram} from "../../../utils/shanties";
+import {Program, Provider, Wallet} from "@project-serum/anchor";
+import pfpIDL from "../../../lib/idl/pfp_idl.json";
 
 const opts = {
   preflightCommitment: "processed" as ConfirmOptions,
@@ -34,19 +32,13 @@ export default async function handler(
   // @ts-ignore
   const wallet = new Wallet(Keypair.generate());
   const provider = new Provider(connection, wallet, opts.preflightCommitment);
-  const programPfp = getPfpProgram(provider);
+  const programPfp = new Program(pfpIDL as anchor.Idl, process.env.NEXT_PUBLIC_PFP_PROGRAM as string, provider);
   const stakesPfp = await programPfp.account.stake.all();
 
-  const programPets = getPetsProgram(provider);
-  const stakesPets = await programPets.account.stake.all();
 
-  const programShanties = getShantiesProgram(provider);
-  const stakesShanties = await programShanties.account.stake.all();
 
   res.setHeader('Cache-Control', 's-maxage=3600');
   res.status(200).json({data: [
       {creator: "sea shanties", collection : "citizens", authorities:stakesPfp.filter((stake) => stake.account.withdrawn === false).map(stake => stake.account.authority.toString())},
-      {creator: "sea shanties", collection : "pets", authorities:stakesPets.filter((stake) => stake.account.withdrawn === false).map(stake => stake.account.authority.toString())},
-      {creator: "sea shanties", collection : "shanties", authorities:stakesShanties.filter((stake) => stake.account.withdrawn === false).map(stake => stake.account.authority.toString())}
     ]});
 }

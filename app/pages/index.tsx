@@ -1,5 +1,6 @@
 import { ToastContainer } from 'react-toastify';
 import React, {useEffect, useRef} from 'react';
+import useSWR from "swr";
 import Navigation from "../components/Navigation";
 import WavesBg from "../public/images/wave.svg";
 import Bg from "../public/images/out.png";
@@ -15,9 +16,20 @@ import usePfpGameStore from "../hooks/usePfpGameStore";
 import PfpGameSummary from "../components/PfpGameSummary";
 import ConnectDialog from "../components/shared/ConnectDialog";
 import CollectionSummary from "../components/CollectionSummary";
+import {RaffleType} from "../utils/raffle";
+function useRaffles () {
+    const { data, error } = useSWR(`https://raffle.shill-city.com/api/raffle/all`,(apiPath: RequestInfo) => fetch(apiPath).then(res => res.json()));
 
+    return {
+        raffles: data as RaffleType[],
+        isLoading: !error && !data,
+        isError: error
+    }
+}
 export default function Home() {
     const wallet = useAnchorWallet();
+    const {raffles, isLoading, isError} = useRaffles();
+    console.log('raffle', raffles, isLoading, isError);
     const getSccStats = useShillCityCapitalStore((state) => state.getSccStats);
     // shanties
     const initShantiesState = useShantiesStore((state) => state.initState);
