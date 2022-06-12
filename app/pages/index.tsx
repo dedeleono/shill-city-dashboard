@@ -170,7 +170,7 @@ export default function Home() {
                             Latest Raffles
                         </div>
                         <a
-                            href="https://magiceden.io/creators/sea_shanties"
+                            href="https://raffle.shill-city.com"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="btn btn-sm btn-outline mt-2"
