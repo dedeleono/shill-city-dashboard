@@ -7,6 +7,8 @@ module.exports = {
       'infura-ipfs.io',
       'arweave.net',
       'hydra-raffle.s3.amazonaws.com',
+      'raffle.s3.amazonaws.com',
+      'shdw-drive.genesysgo.net'
     ],
   },
 }

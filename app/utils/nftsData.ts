@@ -249,19 +249,14 @@ export default class NftsData {
             const uri = metadata.data.data.uri.replace("dweb.link", "infura-ipfs.io")
             const { data } = await axios.get(uri);
             let image = data?.image;
-            if(image.includes('ipfs.dweb.link')){
-                // We need to transform https://xxx.ipfs.dweb.link to https://infura-ipfs.io/ipfs/xxx
-                // nextjs does not allow whitelisting subdomains so we need to fetch images from 1 root domain
-                const id = image.split('//').pop().split('.')[0];
-                image = `https://infura-ipfs.io/ipfs/${id}?ext=jpg`;
-            }
+            
             const isLegendary = this.hashTableLegendaries.includes(metadata.data.mint);
 
             return {
                 ...data,
                 image,
                 isLegendary,
-                id: Number(data.name.replace(/^\D+/g, "").split(" - ")[0]),
+                id: Number(data.name?.replace(/^\D+/g, "").split(" - ")[0]),
                 redemptionRate: isLegendary ? this.redemptionRateLegendary : this.redemptionRate,
                 mint: metadata.data.mint,
             };
