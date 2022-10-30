@@ -15,10 +15,11 @@ import legendariesHashTable from "../lib/hash_table/pfp_legendaries_hash_table.j
 import NftsData from "../utils/nftsData";
 import { toast } from "react-toastify";
 import { chunks, timeout } from "../utils/common";
-import { getTarnishedProgram, TARNISHED_LOCK_MULTIPLIERS } from "../utils/tarnished";
+import { getTarnishedProgram, getTarnishedUpgradeProgram, TARNISHED_LOCK_MULTIPLIERS } from "../utils/tarnished";
 
 type PfpState = {
     program: Program;
+    programUpgrade: Program;
     connection: Connection;
     jollyranch: PublicKey;
     jollyBump: number;
@@ -40,6 +41,7 @@ type PfpStats = {
     totalStaked: number,
     stakedNfts: any,
     unStakedNfts: any,
+    totalTarnished: number,
 };
 
 interface UsePfpStore {
@@ -64,11 +66,17 @@ const useTarnishedStore = create<UsePfpStore>((set, get) => ({
         const totalStaked = await nfts.getTotalStakedNfts();
         const stakedNfts = await nfts.getWalletStakedNfts();
         const unStakedNfts = await nfts.getWalletUnStakedNfts();
+
+        const citizens = await get().state.programUpgrade.account.citizen.all();
+        const totalTarnished = citizens.filter(_item => _item.account.isUpgraded === true).length;
+        console.log("hello", totalTarnished);
+
         set({
             stats: {
                 totalStaked,
                 stakedNfts,
                 unStakedNfts,
+                totalTarnished,
             },
         });
         return true;
@@ -81,6 +89,8 @@ const useTarnishedStore = create<UsePfpStore>((set, get) => ({
 
         const provider = new anchor.AnchorProvider(connection, wallet, "processed" as ConfirmOptions);
         const program = getTarnishedProgram(provider);
+
+        const programUpgrade = getTarnishedUpgradeProgram(provider);
 
 
         console.log('test');
@@ -118,6 +128,7 @@ const useTarnishedStore = create<UsePfpStore>((set, get) => ({
         set({
             state: {
                 program,
+                programUpgrade,
                 connection,
                 jollyranch,
                 jollyBump,

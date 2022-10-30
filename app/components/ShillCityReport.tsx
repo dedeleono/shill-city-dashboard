@@ -66,11 +66,11 @@ export default function ShillCityReport() {
                     </div>
                     <div className="flex ml-5">
                         <div className="grow">Gen1</div>
-                        <div className="">{pfpStats?.totalStaked}</div>
+                        <div className="">{pfpStats?.totalStaked}/{6666 - tarnishedStats.totalTarnished}</div>
                     </div>
                     <div className="flex ml-5">
                         <div className="grow">Gen2 (Tarnished)</div>
-                        <div className="">{tarnishedStats?.totalStaked}</div>
+                        <div className="">{tarnishedStats?.totalStaked}/{tarnishedStats.totalTarnished}</div>
                     </div>
                     <div className="flex ml-2">
                         <div className="grow">Pets</div>

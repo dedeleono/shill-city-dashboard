@@ -1,0 +1,703 @@
+{
+  "version": "0.1.0",
+  "name": "ssupgrade",
+  "instructions": [
+    {
+      "name": "initializeCitizenData",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "citizenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "nftMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "nftMetadata",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "upgradeConfig",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "updateAuthority",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMetadataProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "time",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "deleteCitizenData",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "nftMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "citizenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "nftMetadata",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "upgradeConfig",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "updateAuthority",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMetadataProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "updateAuthorityBump",
+          "type": "u8"
+        },
+        {
+          "name": "withSafetyCheck",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "initializeUpgradeConfig",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "upgradeTokenMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "upgradeConfig",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "citizenCollectionAddress",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "oldAtlantisCollectionAddress",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "originalUpdateAuthority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "time",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "upgradeConfigBump",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "deleteUpgradeConfig",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "upgradeConfig",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "enterUpgrade",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "upgradeTokenMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "citizenNftTokenMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "citizenTokenMetadata",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "trtnTokenAuthorityWallet",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "citizenNftTokenAuthorityWallet",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "citizenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "upgradeConfig",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "upgradeAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "nftProgramId",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "time",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "burnCrystalAndBook",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "citizenNftTokenMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "crystalNftTokenMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "bookNftTokenMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "crystalTokenMetadata",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "bookTokenMetadata",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "crystalNftTokenAuthorityWallet",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "bookNftTokenAuthorityWallet",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "upgradeConfig",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "upgradeAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "nftProgramId",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "time",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "burnGodStoneAndBook",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "citizenNftTokenMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "stoneNftTokenMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "bookNftTokenMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "stoneTokenMetadata",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "bookTokenMetadata",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "stoneNftTokenAuthorityWallet",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "bookNftTokenAuthorityWallet",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "upgradeConfig",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "upgradeAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "nftProgramId",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "time",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "burnHeart",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "citizenNftTokenMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "heartNftTokenMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "heartTokenMetadata",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "heartNftTokenAuthorityWallet",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "upgradeConfig",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "upgradeAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "nftProgramId",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "time",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "upgradeCitizen",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "citizenNftTokenMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "citizenTokenMetadata",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "upgradeConfig",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "upgradeAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "citizenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "updateAuthority",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "nftProgramId",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "time",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "authorityBump",
+          "type": "u8"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "UpgradeConfig",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "upgradeTokenMint",
+            "type": "publicKey"
+          },
+          {
+            "name": "citizenCollectionAddress",
+            "type": "publicKey"
+          },
+          {
+            "name": "oldAtlantisCollectionAddress",
+            "type": "publicKey"
+          },
+          {
+            "name": "originalUpdateAuthority",
+            "type": "publicKey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "time",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpgradeAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "wallet",
+            "type": "publicKey"
+          },
+          {
+            "name": "mint",
+            "type": "publicKey"
+          },
+          {
+            "name": "canUpgrade",
+            "type": "bool"
+          },
+          {
+            "name": "heartCount",
+            "type": "u64"
+          },
+          {
+            "name": "godUpgrade",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Citizen",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "isUpgraded",
+            "type": "bool"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "InvalidTokenAmount",
+      "msg": "Not enough tokens"
+    },
+    {
+      "code": 6001,
+      "name": "DoubleUpgrade",
+      "msg": "Can't upgrade twice"
+    },
+    {
+      "code": 6002,
+      "name": "NoValidSigner",
+      "msg": "No valid signer present"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidUpgradeState",
+      "msg": "Invalid state you must enter upgrade first"
+    },
+    {
+      "code": 6004,
+      "name": "InvalidNFTMetadata",
+      "msg": "Invalid NFT Metadata"
+    }
+  ]
+}
