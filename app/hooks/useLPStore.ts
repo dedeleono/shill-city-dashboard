@@ -150,7 +150,7 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
       ASSOCIATED_TOKEN_PROGRAM_ID,
       TOKEN_PROGRAM_ID,
       trtnToken,
-      program.provider.wallet.publicKey
+      provider.wallet.publicKey
     );
 
     // console.log("walletTrtnAccount", walletTrtnAccount.toBase58());
@@ -172,7 +172,7 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
       ASSOCIATED_TOKEN_PROGRAM_ID,
       TOKEN_PROGRAM_ID,
       usdcToken,
-      program.provider.wallet.publicKey
+      provider.wallet.publicKey
     );
 
     // console.log("walletUsdcAccount", walletUsdcAccount.toBase58());
@@ -196,7 +196,7 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
       ASSOCIATED_TOKEN_PROGRAM_ID,
       TOKEN_PROGRAM_ID,
       psdnShellAccount,
-      program.provider.wallet.publicKey
+      provider.wallet.publicKey
     );
 
     // console.log("walletShellAccount", walletShellAccount.toBase58());
@@ -286,7 +286,7 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
       ASSOCIATED_TOKEN_PROGRAM_ID,
       TOKEN_PROGRAM_ID,
       trtnToken,
-      program.provider.wallet.publicKey
+      provider.wallet.publicKey
     );
     // console.log("walletTrtnAccount", walletTrtnAccount.toString());
 
@@ -316,7 +316,7 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
       ASSOCIATED_TOKEN_PROGRAM_ID,
       TOKEN_PROGRAM_ID,
       shellToken,
-      program.provider.wallet.publicKey
+      provider.wallet.publicKey
     );
     // console.log("walletShellAccount", walletShellAccount.toString());
     set({
@@ -404,7 +404,7 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
     const tx = new anchor.web3.Transaction();
 
     try {
-      let stakeRedeem_ix = await _tideState.program.instruction.stakeRedeem({
+      const stakeRedeem_ix = await _tideState.program.instruction.stakeRedeem({
         accounts: {
           config: _tideState.tide,
           stake: _tideState.stake,
@@ -418,7 +418,7 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
           rent: anchor.web3.SYSVAR_RENT_PUBKEY,
         },
       });
-      let stakeWithdraw_ix = await _tideState.program.instruction.stakeWithdraw({
+      const stakeWithdraw_ix = await _tideState.program.instruction.stakeWithdraw({
         accounts: {
           config: _tideState.tide,
           stake: _tideState.stake,

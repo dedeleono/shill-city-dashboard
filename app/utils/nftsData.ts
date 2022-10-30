@@ -21,6 +21,7 @@ type GroupMultiplier = {
 }
 
 export default class NftsData {
+    provider: anchor.AnchorProvider;
     program: Program;
     connection: Connection;
     rpcEndpoint: string;
@@ -31,6 +32,7 @@ export default class NftsData {
     lockMultipliers: LockMultiplier[];
     groupMultipliers: GroupMultiplier[];
     constructor(
+        provider: anchor.AnchorProvider,
         program: Program,
         hashTable: string[],
         hashTableLegendaries: string[] = [],
@@ -39,6 +41,7 @@ export default class NftsData {
         lockMultipliers: LockMultiplier[] = [],
         groupMultipliers: GroupMultiplier[] = [],
     ) {
+        this.provider = provider;
         this.program = program;
         this.rpcEndpoint = process.env.NEXT_PUBLIC_RPC_ENDPOINT as string
         this.connection = new anchor.web3.Connection(
@@ -55,7 +58,7 @@ export default class NftsData {
     async getWalletUnStakedNfts() {
         // console.log("fetched mint hashes");
         const tokenAccounts = await this.program.provider.connection.getParsedTokenAccountsByOwner(
-            this.program.provider.wallet.publicKey,
+            this.provider.wallet.publicKey,
             {
                 programId: TOKEN_PROGRAM_ID,
             }
@@ -78,7 +81,7 @@ export default class NftsData {
                 memcmp: {
                     offset: 8, // Discriminator
                     // bytes: bs58.encode(wallet.publicKey.toBuffer()),
-                    bytes: this.program.provider.wallet.publicKey.toBase58(),
+                    bytes: this.provider.wallet.publicKey.toBase58(),
                 },
             },
         ]);
@@ -91,6 +94,7 @@ export default class NftsData {
             const keys = [nft_account.publicKey.toBuffer()];
             if (nft_account.account.mints) {
                 // Needed for pets
+                //@ts-ignore
                 keys.push(nft_account.account.mints[0].toBuffer());
             }
             const [stake_spl, _stakeBump] =
@@ -134,8 +138,10 @@ export default class NftsData {
             const stakeAccount = stakedNfts.find(stakedNft => {
                 if (stakedNft.account.mints) {
                     // Needed for pets
+                    //@ts-ignore
                     return nftData.mint === stakedNft.account.mints[0].toString();
                 }
+                //@ts-ignore
                 return nftData.mint === stakedNft.account.mint.toString()
 
             });
@@ -146,7 +152,9 @@ export default class NftsData {
             let redemptionRate = null;
             if (stakeAccount) {
                 if (stakeAccount.account.endDate) {
+                    //@ts-ignore
                     const lockEndUnix = stakeAccount.account.endDate * 1000;
+                    //@ts-ignore
                     const lockStartUnix = stakeAccount.account.startDate * 1000;
                     const todayUnix = parseInt((new Date().getTime()).toFixed(0));
                     //const future = new Date();
@@ -157,6 +165,7 @@ export default class NftsData {
                         const lockPeriodInDays = (lockEndUnix - lockStartUnix) / (1000 * 3600 * 24);
                         lockMultiplier = this.lockMultipliers.find(multiplier => multiplier.days === lockPeriodInDays);
                         const relativeTime = new RelativeTime({ locale: 'en' });
+                        //@ts-ignore
                         lockEndsIn = relativeTime.from(new Date(stakeAccount.account.endDate * 1000))
                     }
                 }
@@ -173,13 +182,16 @@ export default class NftsData {
                         }
                     }
                     const currDate = new Date().getTime() / 1000;
+
                     const daysElapsed =
+                        //@ts-ignore
                         Math.abs(currDate - stakeAccount.account.startDate) /
                         (60 * 60 * 24);
                     console.log(stakeAccount.account);
                     let amountRedeemed = 0;
                     if (stakeAccount.account.amountRedeemed) {
                         amountRedeemed =
+                            //@ts-ignore
                             stakeAccount.account.amountRedeemed.toNumber() / 1e6;
                     }
                     estimateRewards = redemptionRate * daysElapsed - amountRedeemed;
@@ -204,6 +216,7 @@ export default class NftsData {
         if (stakes[0] && stakes[0].account.stakeAmount) {
             stakes.map((stake) => {
                 if (stake.account.withdrawn === false) {
+                    //@ts-ignore
                     for (let index = 0; index < stake.account.stakeAmount; index++) {
                         totalStaked++;
                     }
@@ -242,7 +255,7 @@ export default class NftsData {
         });
         const metadatas = accountInfoPdas.map(accountInfoPda => {
             return new programs.metadata.Metadata(
-                this.program.provider.wallet.publicKey.toString(),
+                this.provider.wallet.publicKey.toString(),
                 accountInfoPda as AccountInfo<Buffer>
             );
         })
@@ -252,7 +265,7 @@ export default class NftsData {
         return await Promise.all(metadatas.map(async metadata => {
             const uri = metadata.data.data.uri.replace("dweb.link", "infura-ipfs.io")
             const { data } = await axios.get(uri);
-            let image = data?.image;
+            const image = data?.image;
 
             const isLegendary = this.hashTableLegendaries.includes(metadata.data.mint);
 

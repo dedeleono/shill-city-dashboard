@@ -1,7 +1,7 @@
 import create from "zustand";
 import * as anchor from "@project-serum/anchor";
 import { ConfirmOptions, Connection, PublicKey } from "@solana/web3.js";
-import { Program, Provider } from "@project-serum/anchor";
+import { Program } from "@project-serum/anchor";
 import {
     ASSOCIATED_TOKEN_PROGRAM_ID,
     Token,
@@ -27,6 +27,7 @@ type PfpState = {
     splBump: number;
     wallet_token_account: PublicKey;
     jollyAccount: any;
+    provider: anchor.AnchorProvider;
 };
 
 type UnStakeNft = {
@@ -58,7 +59,7 @@ const usePfpStore = create<UsePfpStore>((set, get) => ({
     stats: {} as PfpStats,
     getStats: async () => {
         const program = get().state.program;
-        const nfts = new NftsData(program, hashTable, legendariesHashTable, 4.2, 10, PFP_LOCK_MULTIPLIERS);
+        const nfts = new NftsData(get().state.provider, program, hashTable, legendariesHashTable, 4.2, 10, PFP_LOCK_MULTIPLIERS);
         const totalStaked = await nfts.getTotalStakedNfts();
         const stakedNfts = await nfts.getWalletStakedNfts();
         const unStakedNfts = await nfts.getWalletUnStakedNfts();
@@ -115,6 +116,7 @@ const usePfpStore = create<UsePfpStore>((set, get) => ({
                 splBump,
                 wallet_token_account,
                 jollyAccount,
+                provider,
             },
         });
 
@@ -148,7 +150,7 @@ const usePfpStore = create<UsePfpStore>((set, get) => ({
                         ASSOCIATED_TOKEN_PROGRAM_ID,
                         TOKEN_PROGRAM_ID,
                         nft,
-                        _state.program.provider.wallet.publicKey
+                        _state.provider.wallet.publicKey
                     );
 
                     // check if token has an associated account
@@ -165,7 +167,7 @@ const usePfpStore = create<UsePfpStore>((set, get) => ({
 
                     const stakeNftResult = await _state.program.instruction.stakeNftV2(lockPeriod, stakeBump, {
                         accounts: {
-                            authority: _state.program.provider.wallet.publicKey.toString(),
+                            authority: _state.provider.wallet.publicKey.toString(),
                             stake: stake.publicKey.toString(),
                             senderSplAccount: wallet_nft_account.toString(),
                             recieverSplAccount: stake_spl.toString(),
@@ -178,6 +180,7 @@ const usePfpStore = create<UsePfpStore>((set, get) => ({
                     });
                     tx.add(stakeNftResult);
                 }
+                //@ts-ignore
                 await _state.program.provider.send(tx, signers);
             }
             await timeout(300);
@@ -209,7 +212,7 @@ const usePfpStore = create<UsePfpStore>((set, get) => ({
                         ASSOCIATED_TOKEN_PROGRAM_ID,
                         TOKEN_PROGRAM_ID,
                         _unstakeNft.nftPubKey,
-                        _state.program.provider.wallet.publicKey
+                        _state.provider.wallet.publicKey
                     );
                     const [stake_spl, _stakeBump] =
                         await anchor.web3.PublicKey.findProgramAddress(
@@ -220,7 +223,7 @@ const usePfpStore = create<UsePfpStore>((set, get) => ({
                         accounts: {
                             stake: _unstakeNft.stakePubKey.toString(),
                             jollyranch: _state.jollyranch.toString(),
-                            authority: _state.program.provider.wallet.publicKey.toString(),
+                            authority: _state.provider.wallet.publicKey.toString(),
                             senderSplAccount: stake_spl.toString(),
                             recieverSplAccount: wallet_nft_account.toString(),
                             senderTritonAccount: _state.recieverSplAccount.toString(),
@@ -235,6 +238,7 @@ const usePfpStore = create<UsePfpStore>((set, get) => ({
                     });
                     tx.add(redeemNftResult);
                 }
+                //@ts-ignore
                 await _state.program.provider.send(tx);
             }
             await timeout(300);
@@ -255,7 +259,7 @@ const usePfpStore = create<UsePfpStore>((set, get) => ({
                 accounts: {
                     stake: stakePubKey.toString(),
                     jollyranch: _state.jollyranch.toString(),
-                    authority: _state.program.provider.wallet.publicKey.toString(),
+                    authority: _state.provider.wallet.publicKey.toString(),
                     senderSplAccount: _state.recieverSplAccount.toString(),
                     recieverSplAccount: _state.wallet_token_account.toString(),
                     mint: _state.spl_token.toString(),
@@ -292,7 +296,7 @@ const usePfpStore = create<UsePfpStore>((set, get) => ({
                         accounts: {
                             stake: stakedMintsChunked[k].stakeAccount.publicKey.toString(),
                             jollyranch: _state.jollyranch.toString(),
-                            authority: _state.program.provider.wallet.publicKey.toString(),
+                            authority: _state.provider.wallet.publicKey.toString(),
                             senderSplAccount: _state.recieverSplAccount.toString(),
                             recieverSplAccount: _state.wallet_token_account.toString(),
                             mint: _state.spl_token.toString(),
@@ -304,6 +308,7 @@ const usePfpStore = create<UsePfpStore>((set, get) => ({
                     });
                     tx.add(redeem);
                 }
+                //@ts-ignore
                 await _state.program.provider.sendAndConfirm(tx);
             }
             await timeout(300);

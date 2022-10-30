@@ -1,10 +1,10 @@
 import { ToastContainer } from 'react-toastify';
-import React, {useEffect, useRef} from 'react';
+import React, { useEffect } from 'react';
 import useSWR from "swr";
 import Navigation from "../components/Navigation";
 import WavesBg from "../public/images/wave.svg";
 import Bg from "../public/images/out.png";
-import {useAnchorWallet} from "@solana/wallet-adapter-react";
+import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import useShillCityCapitalStore from "../hooks/useShillCityCaptitalStore";
 import useShantiesStore from "../hooks/useShantiesStore";
 import ShillCityReport from "../components/ShillCityReport";
@@ -16,11 +16,11 @@ import usePfpGameStore from "../hooks/usePfpGameStore";
 import PfpGameSummary from "../components/PfpGameSummary";
 import ConnectDialog from "../components/shared/ConnectDialog";
 import CollectionSummary from "../components/CollectionSummary";
-import {RaffleType} from "../utils/raffle";
+import { RaffleType } from "../utils/raffle";
 import RaffleCard from "../components/RaffleCard";
 import useTarnishedStore from '../hooks/useTarnishedStore';
-function useRaffles () {
-    const { data, error } = useSWR(`https://raffle.shill-city.com/api/raffle/all`,(apiPath: RequestInfo) => fetch(apiPath).then(res => res.json()));
+function useRaffles() {
+    const { data, error } = useSWR(`https://raffle.shill-city.com/api/raffle/all`, (apiPath: RequestInfo) => fetch(apiPath).then(res => res.json()));
 
     return {
         raffles: data as RaffleType[],
@@ -30,7 +30,7 @@ function useRaffles () {
 }
 export default function Home() {
     const wallet = useAnchorWallet();
-    const {raffles} = useRaffles();
+    const { raffles } = useRaffles();
 
     const getSccStats = useShillCityCapitalStore((state) => state.getSccStats);
     // shanties
@@ -75,7 +75,7 @@ export default function Home() {
     }, [wallet]);
 
     useEffect(() => {
-        if(shantiesState?.program && pfpState?.program && petsState?.program && psdnState?.poseidon && tideState?.tide && pfpGameState?.program && tarnishedState?.program) {
+        if (shantiesState?.program && pfpState?.program && petsState?.program && psdnState?.poseidon && tideState?.tide && pfpGameState?.program && tarnishedState?.program) {
             getShantiesStats();
             getPetsStats();
             getPfpStats();
@@ -85,7 +85,7 @@ export default function Home() {
             getTideStats();
             getPfpGameStats();
         }
-    }, [shantiesState, pfpState, petsState,psdnState, tideState, pfpGameState, tarnishedState]);
+    }, [shantiesState, pfpState, petsState, psdnState, tideState, pfpGameState, tarnishedState]);
     return (
         <main
             style={{
@@ -187,11 +187,11 @@ export default function Home() {
                     </div>
 
                     <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pt-4">
-                        {raffles && raffles.slice(0,4).map(raffle =>
+                        {raffles && raffles.slice(0, 4).map(raffle =>
                             <RaffleCard
                                 key={`raffle-${raffle.publicKey}`}
                                 raffle={raffle}
-                                onEdit={() => {return}}
+                                onEdit={() => { return }}
                             />
                         )}
                     </div>

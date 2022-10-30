@@ -30,6 +30,7 @@ type PfpGameState = {
     splBump: number;
     wallet_token_account: PublicKey;
     jollyAccount: any;
+    provider: anchor.AnchorProvider
 };
 
 type PfpGameStats = {
@@ -85,12 +86,14 @@ const usePfpGameStore = create<UsePfpGameStore>((set, get) => ({
                 splBump,
                 wallet_token_account,
                 jollyAccount,
+                provider,
             },
         });
     },
     getPfpGameStats: async () => {
         const program = get().pfpGameState.program;
-        const gangs = await getGangs(program);
+        const provider = get().pfpGameState.provider;
+        const gangs = await getGangs(program, provider);
 
         set({
             pfpGameStats: {
@@ -105,19 +108,19 @@ const usePfpGameStore = create<UsePfpGameStore>((set, get) => ({
 
 
 
-async function getGangs(program: Program) {
+async function getGangs(program: Program, provider: anchor.AnchorProvider) {
     const gangsForOwner = await program.account.gang.all([
         {
             memcmp: {
                 offset: 8,
-                bytes: bs58.encode(program.provider.wallet.publicKey.toBuffer()),
+                bytes: bs58.encode(provider.wallet.publicKey.toBuffer()),
                 // bytes: bs58.encode(new Buffer(0)),
             },
         },
     ]);
     gangsForOwner.sort(function (a, b) {
-        const n1 = parseInt(a.account.timestamp);
-        const n2 = parseInt(b.account.timestamp);
+        const n1 = parseInt(a.account.timestamp as string);
+        const n2 = parseInt(b.account.timestamp as string);
         return n2 - n1;
     });
     return gangsForOwner

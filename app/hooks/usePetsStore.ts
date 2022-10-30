@@ -19,6 +19,7 @@ import { getPetsProgram, PETS_GROUP_MULTIPLIERS } from "../utils/pets";
 
 type PetsState = {
     program: Program;
+    provider: anchor.AnchorProvider;
     connection: Connection;
     jollyranch: PublicKey;
     jollyBump: number;
@@ -59,7 +60,7 @@ const usePetsStore = create<UsePetsStore>((set, get) => ({
     getStats: async () => {
         const program = get().state.program;
         // TODO calculate PETS_GROUP_MULTIPLIERS
-        const nfts = new NftsData(program, hashTable, legendariesHashTable, 1, 10, [], PETS_GROUP_MULTIPLIERS);
+        const nfts = new NftsData(get().state.provider, program, hashTable, legendariesHashTable, 1, 10, [], PETS_GROUP_MULTIPLIERS);
         const totalStaked = await nfts.getTotalStakedNfts();
         const stakedNfts = await nfts.getWalletStakedNfts();
         const unStakedNfts = await nfts.getWalletUnStakedNfts();
@@ -108,6 +109,7 @@ const usePetsStore = create<UsePetsStore>((set, get) => ({
         set({
             state: {
                 program,
+                provider,
                 connection,
                 jollyranch,
                 jollyBump,
@@ -149,7 +151,7 @@ const usePetsStore = create<UsePetsStore>((set, get) => ({
                         ASSOCIATED_TOKEN_PROGRAM_ID,
                         TOKEN_PROGRAM_ID,
                         nft,
-                        _state.program.provider.wallet.publicKey
+                        _state.provider.wallet.publicKey
                     );
 
                     // check if token has an associated account
@@ -166,7 +168,7 @@ const usePetsStore = create<UsePetsStore>((set, get) => ({
 
                     const stakeNftResult = await _state.program.instruction.stakeNftV2(lockPeriod, stakeBump, {
                         accounts: {
-                            authority: _state.program.provider.wallet.publicKey.toString(),
+                            authority: _state.provider.wallet.publicKey.toString(),
                             stake: stake.publicKey.toString(),
                             senderSplAccount: wallet_nft_account.toString(),
                             recieverSplAccount: stake_spl.toString(),
@@ -179,7 +181,7 @@ const usePetsStore = create<UsePetsStore>((set, get) => ({
                     });
                     tx.add(stakeNftResult);
                 }
-                await _state.program.provider.send(tx, signers);
+                await _state.provider.sendAndConfirm(tx, signers);
             }
             await timeout(300);
             get().getStats();
@@ -210,7 +212,7 @@ const usePetsStore = create<UsePetsStore>((set, get) => ({
                         ASSOCIATED_TOKEN_PROGRAM_ID,
                         TOKEN_PROGRAM_ID,
                         _unstakeNft.nftPubKey,
-                        _state.program.provider.wallet.publicKey
+                        _state.provider.wallet.publicKey
                     );
                     const [stake_spl, _stakeBump] =
                         await anchor.web3.PublicKey.findProgramAddress(
@@ -221,7 +223,7 @@ const usePetsStore = create<UsePetsStore>((set, get) => ({
                         accounts: {
                             stake: _unstakeNft.stakePubKey.toString(),
                             jollyranch: _state.jollyranch.toString(),
-                            authority: _state.program.provider.wallet.publicKey.toString(),
+                            authority: _state.provider.wallet.publicKey.toString(),
                             senderSplAccount: stake_spl.toString(),
                             recieverSplAccount: wallet_nft_account.toString(),
                             senderTritonAccount: _state.recieverSplAccount.toString(),
@@ -236,6 +238,7 @@ const usePetsStore = create<UsePetsStore>((set, get) => ({
                     });
                     tx.add(redeemNftResult);
                 }
+                //@ts-ignore
                 await _state.program.provider.send(tx);
             }
             await timeout(300);
@@ -256,7 +259,7 @@ const usePetsStore = create<UsePetsStore>((set, get) => ({
                 accounts: {
                     stake: stakePubKey.toString(),
                     jollyranch: _state.jollyranch.toString(),
-                    authority: _state.program.provider.wallet.publicKey.toString(),
+                    authority: _state.provider.wallet.publicKey.toString(),
                     senderSplAccount: _state.recieverSplAccount.toString(),
                     recieverSplAccount: _state.wallet_token_account.toString(),
                     mint: _state.spl_token.toString(),
@@ -293,7 +296,7 @@ const usePetsStore = create<UsePetsStore>((set, get) => ({
                         accounts: {
                             stake: stakedMintsChunked[k].stakeAccount.publicKey.toString(),
                             jollyranch: _state.jollyranch.toString(),
-                            authority: _state.program.provider.wallet.publicKey.toString(),
+                            authority: _state.provider.wallet.publicKey.toString(),
                             senderSplAccount: _state.recieverSplAccount.toString(),
                             recieverSplAccount: _state.wallet_token_account.toString(),
                             mint: _state.spl_token.toString(),
@@ -305,6 +308,7 @@ const usePetsStore = create<UsePetsStore>((set, get) => ({
                     });
                     tx.add(redeem);
                 }
+                //@ts-ignore
                 await _state.program.provider.sendAndConfirm(tx);
             }
             await timeout(300);

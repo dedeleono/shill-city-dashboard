@@ -1,7 +1,7 @@
 import create from "zustand";
 import * as anchor from "@project-serum/anchor";
 import { ConfirmOptions, Connection, PublicKey } from "@solana/web3.js";
-import { Program, Provider } from "@project-serum/anchor";
+import { Program } from "@project-serum/anchor";
 import {
     ASSOCIATED_TOKEN_PROGRAM_ID,
     Token,
@@ -27,6 +27,7 @@ type ShantiesState = {
     splBump: number;
     wallet_token_account: PublicKey;
     jollyAccount: any;
+    provider: anchor.AnchorProvider;
 };
 
 type ShantiesStats = {
@@ -51,7 +52,7 @@ const useShantiesStore = create<UseShantiesStore>((set, get) => ({
     stats: {} as ShantiesStats,
     getStats: async () => {
         const program = get().state.program;
-        const shantiesNfts = new NftsData(program, hashTable, legendariesHashTable, 6.9, 16.9);
+        const shantiesNfts = new NftsData(get().state.provider, program, hashTable, legendariesHashTable, 6.9, 16.9);
         const totalStaked = await shantiesNfts.getTotalStakedNfts();
         const stakedNfts = await shantiesNfts.getWalletStakedNfts();
         const unStakedNfts = await shantiesNfts.getWalletUnStakedNfts();
@@ -108,6 +109,7 @@ const useShantiesStore = create<UseShantiesStore>((set, get) => ({
                 splBump,
                 wallet_token_account,
                 jollyAccount,
+                provider,
             },
         });
 
@@ -129,7 +131,7 @@ const useShantiesStore = create<UseShantiesStore>((set, get) => ({
             ASSOCIATED_TOKEN_PROGRAM_ID,
             TOKEN_PROGRAM_ID,
             nft,
-            _state.program.provider.wallet.publicKey
+            _state.provider.wallet.publicKey
         );
 
         // check if token has an associated account
@@ -146,7 +148,7 @@ const useShantiesStore = create<UseShantiesStore>((set, get) => ({
         try {
             await _state.program.rpc.stakeNft(stakeBump, {
                 accounts: {
-                    authority: _state.program.provider.wallet.publicKey.toString(),
+                    authority: _state.provider.wallet.publicKey.toString(),
                     stake: stake.publicKey.toString(),
                     senderSplAccount: wallet_nft_account.toString(),
                     recieverSplAccount: stake_spl.toString(),
@@ -173,7 +175,7 @@ const useShantiesStore = create<UseShantiesStore>((set, get) => ({
             ASSOCIATED_TOKEN_PROGRAM_ID,
             TOKEN_PROGRAM_ID,
             nftPubKey,
-            _state.program.provider.wallet.publicKey
+            _state.provider.wallet.publicKey
         );
         const [stake_spl, _stakeBump] =
             await anchor.web3.PublicKey.findProgramAddress(
@@ -185,7 +187,7 @@ const useShantiesStore = create<UseShantiesStore>((set, get) => ({
                 accounts: {
                     stake: stakePubKey.toString(),
                     jollyranch: _state.jollyranch.toString(),
-                    authority: _state.program.provider.wallet.publicKey.toString(),
+                    authority: _state.provider.wallet.publicKey.toString(),
                     senderSplAccount: stake_spl.toString(),
                     recieverSplAccount: wallet_nft_account.toString(),
                     senderTritonAccount: _state.recieverSplAccount.toString(),
@@ -215,7 +217,7 @@ const useShantiesStore = create<UseShantiesStore>((set, get) => ({
                 accounts: {
                     stake: stakePubKey.toString(),
                     jollyranch: _state.jollyranch.toString(),
-                    authority: _state.program.provider.wallet.publicKey.toString(),
+                    authority: _state.provider.wallet.publicKey.toString(),
                     senderSplAccount: _state.recieverSplAccount.toString(),
                     recieverSplAccount: _state.wallet_token_account.toString(),
                     mint: _state.spl_token.toString(),
@@ -252,7 +254,7 @@ const useShantiesStore = create<UseShantiesStore>((set, get) => ({
                         accounts: {
                             stake: stakedMintsChunked[k].stakeAccount.publicKey.toString(),
                             jollyranch: _state.jollyranch.toString(),
-                            authority: _state.program.provider.wallet.publicKey.toString(),
+                            authority: _state.provider.wallet.publicKey.toString(),
                             senderSplAccount: _state.recieverSplAccount.toString(),
                             recieverSplAccount: _state.wallet_token_account.toString(),
                             mint: _state.spl_token.toString(),
@@ -264,6 +266,7 @@ const useShantiesStore = create<UseShantiesStore>((set, get) => ({
                     });
                     tx.add(redeem);
                 }
+                //@ts-ignore
                 await _state.program.provider.sendAndConfirm(tx);
             }
             await timeout(300);
