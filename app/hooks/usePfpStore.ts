@@ -1,21 +1,21 @@
 import create from "zustand";
 import * as anchor from "@project-serum/anchor";
-import {ConfirmOptions, Connection, PublicKey} from "@solana/web3.js";
-import {Program, Provider} from "@project-serum/anchor";
+import { ConfirmOptions, Connection, PublicKey } from "@solana/web3.js";
+import { Program, Provider } from "@project-serum/anchor";
 import {
     ASSOCIATED_TOKEN_PROGRAM_ID,
     Token,
     TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import { AnchorWallet } from "@solana/wallet-adapter-react";
-import {getTrtnToken} from "../utils/token";
+import { getTrtnToken } from "../utils/token";
 
 import hashTable from "../lib/hash_table/pfp_hash_table.json";
 import legendariesHashTable from "../lib/hash_table/pfp_legendaries_hash_table.json";
 import NftsData from "../utils/nftsData";
-import {toast} from "react-toastify";
-import {chunks, timeout} from "../utils/common";
-import {PFP_LOCK_MULTIPLIERS, getPfpProgram} from "../utils/pfp";
+import { toast } from "react-toastify";
+import { chunks, timeout } from "../utils/common";
+import { PFP_LOCK_MULTIPLIERS, getPfpProgram } from "../utils/pfp";
 
 type PfpState = {
     program: Program;
@@ -41,16 +41,16 @@ type PfpStats = {
 };
 
 interface UsePfpStore {
-    state : PfpState;
+    state: PfpState;
     stats: PfpStats,
     getStats: () => Promise<boolean>;
-    initState: (wallet: AnchorWallet,loadStats?: boolean) => Promise<boolean>;
-    stakeAllNFTs:(lockPeriod: number) => Promise<boolean>;
-    stakeNFTs:(nftPubKeys: PublicKey[], lockPeriod: number) => Promise<boolean>;
-    unstakeAllNFTs:() => Promise<boolean>;
-    unStakeNFTs:(unStakeNfts: UnStakeNft[]) => Promise<boolean>;
-    redeemRewards:(stakePubKey: PublicKey) => Promise<boolean>;
-    redeemAllRewards:() => Promise<boolean>;
+    initState: (wallet: AnchorWallet, loadStats?: boolean) => Promise<boolean>;
+    stakeAllNFTs: (lockPeriod: number) => Promise<boolean>;
+    stakeNFTs: (nftPubKeys: PublicKey[], lockPeriod: number) => Promise<boolean>;
+    unstakeAllNFTs: () => Promise<boolean>;
+    unStakeNFTs: (unStakeNfts: UnStakeNft[]) => Promise<boolean>;
+    redeemRewards: (stakePubKey: PublicKey) => Promise<boolean>;
+    redeemAllRewards: () => Promise<boolean>;
 }
 
 const usePfpStore = create<UsePfpStore>((set, get) => ({
@@ -58,7 +58,7 @@ const usePfpStore = create<UsePfpStore>((set, get) => ({
     stats: {} as PfpStats,
     getStats: async () => {
         const program = get().state.program;
-        const nfts = new NftsData(program,hashTable,legendariesHashTable, 4.2, 10, PFP_LOCK_MULTIPLIERS);
+        const nfts = new NftsData(program, hashTable, legendariesHashTable, 4.2, 10, PFP_LOCK_MULTIPLIERS);
         const totalStaked = await nfts.getTotalStakedNfts();
         const stakedNfts = await nfts.getWalletStakedNfts();
         const unStakedNfts = await nfts.getWalletUnStakedNfts();
@@ -71,13 +71,13 @@ const usePfpStore = create<UsePfpStore>((set, get) => ({
         });
         return true;
     },
-    initState: async (wallet: AnchorWallet, loadStats=false) => {
+    initState: async (wallet: AnchorWallet, loadStats = false) => {
         const connection = new anchor.web3.Connection(
             process.env.NEXT_PUBLIC_RPC_ENDPOINT as string,
             "processed" as ConfirmOptions
         );
 
-        const provider = new Provider(connection, wallet, "processed" as ConfirmOptions);
+        const provider = new anchor.AnchorProvider(connection, wallet, "processed" as ConfirmOptions);
         const program = getPfpProgram(provider);
 
         const [jollyranch, jollyBump] =
@@ -118,12 +118,12 @@ const usePfpStore = create<UsePfpStore>((set, get) => ({
             },
         });
 
-        if(loadStats) {
+        if (loadStats) {
             await get().getStats();
         }
         return true
     },
-    stakeAllNFTs: async(lockPeriod: number) =>{
+    stakeAllNFTs: async (lockPeriod: number) => {
         const _stats = get().stats;
         const unStakedNFTs = _stats.unStakedNfts.map((_unStakeNft: { mint: string; }) => _unStakeNft.mint)
         return await get().stakeNFTs(unStakedNFTs, lockPeriod);
@@ -184,21 +184,21 @@ const usePfpStore = create<UsePfpStore>((set, get) => ({
             get().getStats();
             toast.success("Stake completed!");
             return true;
-        } catch (e:any) {
+        } catch (e: any) {
             console.log('error calling rpc stakeNftV2', e);
             toast.error(`Stake failed ${e?.message ? e.message : ''}`);
             return false;
         }
     },
-    unstakeAllNFTs: async() =>{
+    unstakeAllNFTs: async () => {
         const _stats = get().stats;
-        const stakedNFTs = _stats.stakedNfts.filter((_stakeNft:any) => !_stakeNft.isLocked).map((_stakeNft:any) => ({
+        const stakedNFTs = _stats.stakedNfts.filter((_stakeNft: any) => !_stakeNft.isLocked).map((_stakeNft: any) => ({
             stakePubKey: _stakeNft.stakeAccount.publicKey,
             nftPubKey: _stakeNft.stakeAccount.account.mint,
         }))
         return await get().unStakeNFTs(stakedNFTs);
     },
-    unStakeNFTs: async (unStakeNfts ) => {
+    unStakeNFTs: async (unStakeNfts) => {
         const _state = get().state;
         try {
             let tx;
@@ -242,7 +242,7 @@ const usePfpStore = create<UsePfpStore>((set, get) => ({
             toast.success("Unstake completed!");
             return true;
 
-        } catch (e:any) {
+        } catch (e: any) {
             console.log('error calling rpc unStakeNFT', e);
             toast.error(`UnStake failed ${e?.message ? e.message : ''}`);
             return false;
@@ -269,7 +269,7 @@ const usePfpStore = create<UsePfpStore>((set, get) => ({
             get().getStats();
             toast.success("Redeem rewards completed!");
             return true;
-        } catch (e:any) {
+        } catch (e: any) {
             console.log('error calling rpc redeemRewards', e);
             toast.error(`Redeem rewards failed ${e?.message ? e.message : ''}`);
             return false;
@@ -304,13 +304,13 @@ const usePfpStore = create<UsePfpStore>((set, get) => ({
                     });
                     tx.add(redeem);
                 }
-                await _state.program.provider.send(tx);
+                await _state.program.provider.sendAndConfirm(tx);
             }
             await timeout(300);
             get().getStats();
             toast.success("Redeem all rewards completed!");
             return true;
-        } catch (e:any) {
+        } catch (e: any) {
             console.log('error calling rpc redeemAllRewards', e);
             toast.error(`Redeem all rewards failed ${e?.message ? e.message : ''}`);
             return false;

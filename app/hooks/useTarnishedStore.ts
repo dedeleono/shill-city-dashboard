@@ -10,14 +10,16 @@ import {
 import { AnchorWallet } from "@solana/wallet-adapter-react";
 import { getTrtnToken } from "../utils/token";
 
-import hashTable from "../lib/hash_table/pets_hash_table.json";
-import legendariesHashTable from "../lib/hash_table/pets_legendaries_hash_table.json";
+import hashTable from "../lib/hash_table/pfp_hash_table.json";
+import legendariesHashTable from "../lib/hash_table/pfp_legendaries_hash_table.json";
 import NftsData from "../utils/nftsData";
 import { toast } from "react-toastify";
 import { chunks, timeout } from "../utils/common";
-import { getPetsProgram, PETS_GROUP_MULTIPLIERS } from "../utils/pets";
+import { PFP_LOCK_MULTIPLIERS } from "../utils/pfp";
+import { getTarnishedProgram, TARNISHED_LOCK_MULTIPLIERS } from "../utils/tarnished";
+import { Console } from "console";
 
-type PetsState = {
+type PfpState = {
     program: Program;
     connection: Connection;
     jollyranch: PublicKey;
@@ -27,6 +29,7 @@ type PetsState = {
     splBump: number;
     wallet_token_account: PublicKey;
     jollyAccount: any;
+    jollyTokenAccount: PublicKey;
 };
 
 type UnStakeNft = {
@@ -34,15 +37,15 @@ type UnStakeNft = {
     nftPubKey: PublicKey;
 }
 
-type PetsStats = {
+type PfpStats = {
     totalStaked: number,
     stakedNfts: any,
     unStakedNfts: any,
 };
 
-interface UsePetsStore {
-    state: PetsState;
-    stats: PetsStats,
+interface UsePfpStore {
+    state: PfpState;
+    stats: PfpStats,
     getStats: () => Promise<boolean>;
     initState: (wallet: AnchorWallet, loadStats?: boolean) => Promise<boolean>;
     stakeAllNFTs: (lockPeriod: number) => Promise<boolean>;
@@ -53,13 +56,12 @@ interface UsePetsStore {
     redeemAllRewards: () => Promise<boolean>;
 }
 
-const usePetsStore = create<UsePetsStore>((set, get) => ({
-    state: {} as PetsState,
-    stats: {} as PetsStats,
+const useTarnishedStore = create<UsePfpStore>((set, get) => ({
+    state: {} as PfpState,
+    stats: {} as PfpStats,
     getStats: async () => {
         const program = get().state.program;
-        // TODO calculate PETS_GROUP_MULTIPLIERS
-        const nfts = new NftsData(program, hashTable, legendariesHashTable, 1, 10, [], PETS_GROUP_MULTIPLIERS);
+        const nfts = new NftsData(program, hashTable, legendariesHashTable, 8.5, 8.5, TARNISHED_LOCK_MULTIPLIERS);
         const totalStaked = await nfts.getTotalStakedNfts();
         const stakedNfts = await nfts.getWalletStakedNfts();
         const unStakedNfts = await nfts.getWalletUnStakedNfts();
@@ -79,7 +81,10 @@ const usePetsStore = create<UsePetsStore>((set, get) => ({
         );
 
         const provider = new anchor.AnchorProvider(connection, wallet, "processed" as ConfirmOptions);
-        const program = getPetsProgram(provider);
+        const program = getTarnishedProgram(provider);
+
+
+        console.log('test');
 
         const [jollyranch, jollyBump] =
             await anchor.web3.PublicKey.findProgramAddress(
@@ -105,6 +110,12 @@ const usePetsStore = create<UsePetsStore>((set, get) => ({
             jollyranch.toString()
         );
 
+        const [jollyTokenAccount, tokenBump] = await anchor.web3.PublicKey.findProgramAddress(
+            [jollyranch.toBuffer(), Buffer.from("jolly_token_account")],
+            program.programId
+        );
+
+
         set({
             state: {
                 program,
@@ -116,6 +127,7 @@ const usePetsStore = create<UsePetsStore>((set, get) => ({
                 splBump,
                 wallet_token_account,
                 jollyAccount,
+                jollyTokenAccount,
             },
         });
 
@@ -294,12 +306,12 @@ const usePetsStore = create<UsePetsStore>((set, get) => ({
                             stake: stakedMintsChunked[k].stakeAccount.publicKey.toString(),
                             jollyranch: _state.jollyranch.toString(),
                             authority: _state.program.provider.wallet.publicKey.toString(),
-                            senderSplAccount: _state.recieverSplAccount.toString(),
-                            recieverSplAccount: _state.wallet_token_account.toString(),
-                            mint: _state.spl_token.toString(),
-                            systemProgram: anchor.web3.SystemProgram.programId.toString(),
+                            programSplAccount: _state.jollyTokenAccount,
+                            userSplAccount: _state.wallet_token_account.toString(),
+                            tokenMint: _state.spl_token.toString(),
                             tokenProgram: TOKEN_PROGRAM_ID.toString(),
                             associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID.toString(),
+                            systemProgram: anchor.web3.SystemProgram.programId,
                             rent: anchor.web3.SYSVAR_RENT_PUBKEY.toString(),
                         },
                     });
@@ -320,4 +332,4 @@ const usePetsStore = create<UsePetsStore>((set, get) => ({
 }))
 
 
-export default usePetsStore
+export default useTarnishedStore

@@ -10,8 +10,8 @@ import {
     TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import { AnchorWallet } from "@solana/wallet-adapter-react";
-import {getShellToken, getTrtnToken, getUsdcToken} from "../utils/token";
-import {getSccAccounts} from "../utils/account";
+import { getShellToken, getTrtnToken, getUsdcToken } from "../utils/token";
+import { getSccAccounts } from "../utils/account";
 
 type SccStats = {
     trtnBalance: number;
@@ -20,7 +20,7 @@ type SccStats = {
 };
 
 interface UseShillCityCapitalStore {
-    sccStats : SccStats;
+    sccStats: SccStats;
     getSccStats: (wallet: AnchorWallet) => void;
 }
 
@@ -30,7 +30,7 @@ const useShillCityCapitalStore = create<UseShillCityCapitalStore>((set, get) => 
         const connection = new anchor.web3.Connection(
             process.env.NEXT_PUBLIC_RPC_ENDPOINT as string,
         );
-        const provider = new Provider(connection, wallet, {});
+        const provider = new anchor.AnchorProvider(connection, wallet, {});
         const shellToken = getShellToken();
         const trtnToken = getTrtnToken();
         const usdcToken = getUsdcToken();
@@ -39,7 +39,7 @@ const useShillCityCapitalStore = create<UseShillCityCapitalStore>((set, get) => 
         const sccAccountsTokens = [];
         // get shill city capital tokens
         for (const sccAccount of sccAccounts) {
-            const accountTokens = await provider.connection.getParsedTokenAccountsByOwner(sccAccount, {programId: TOKEN_PROGRAM_ID})
+            const accountTokens = await provider.connection.getParsedTokenAccountsByOwner(sccAccount, { programId: TOKEN_PROGRAM_ID })
             sccAccountsTokens.push(accountTokens);
         }
 
@@ -47,10 +47,10 @@ const useShillCityCapitalStore = create<UseShillCityCapitalStore>((set, get) => 
         let shellBalance = 0;
         let trtnBalance = 0;
         sccAccountsTokens.forEach((sccAccountTokens: any) => {
-            if(sccAccountTokens?.value?.length) {
-                sccAccountTokens.value.forEach((tokenAccount: { pubkey:PublicKey , account:AccountInfo<ParsedAccountData>}) => {
+            if (sccAccountTokens?.value?.length) {
+                sccAccountTokens.value.forEach((tokenAccount: { pubkey: PublicKey, account: AccountInfo<ParsedAccountData> }) => {
                     const uiAmount = tokenAccount?.account?.data?.parsed?.info?.tokenAmount?.uiAmount || 0;
-                    switch(tokenAccount.account.data.parsed.info.mint) {
+                    switch (tokenAccount.account.data.parsed.info.mint) {
                         case shellToken.toBase58():
                             shellBalance += uiAmount;
                             break;

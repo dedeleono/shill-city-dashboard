@@ -1,21 +1,21 @@
 import create from "zustand";
 import * as anchor from "@project-serum/anchor";
-import {ConfirmOptions, Connection, PublicKey} from "@solana/web3.js";
-import {Program, Provider} from "@project-serum/anchor";
+import { ConfirmOptions, Connection, PublicKey } from "@solana/web3.js";
+import { Program, Provider } from "@project-serum/anchor";
 import {
     ASSOCIATED_TOKEN_PROGRAM_ID,
     Token,
     TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import { AnchorWallet } from "@solana/wallet-adapter-react";
-import {getShantiesProgram} from "../utils/shanties";
-import {getTrtnToken} from "../utils/token";
+import { getShantiesProgram } from "../utils/shanties";
+import { getTrtnToken } from "../utils/token";
 
 import hashTable from "../lib/hash_table/shanties_hash_table.json";
 import legendariesHashTable from "../lib/hash_table/shanties_legendaries_hash_table.json";
 import NftsData from "../utils/nftsData";
-import {toast} from "react-toastify";
-import {timeout} from "../utils/common";
+import { toast } from "react-toastify";
+import { timeout } from "../utils/common";
 
 type ShantiesState = {
     program: Program;
@@ -36,14 +36,14 @@ type ShantiesStats = {
 };
 
 interface UseShantiesStore {
-    state : ShantiesState;
+    state: ShantiesState;
     stats: ShantiesStats,
     getStats: () => Promise<boolean>;
-    initState: (wallet: AnchorWallet,loadStats?: boolean) => Promise<boolean>;
-    stakeNFT:(nftPubKey: PublicKey) => Promise<boolean>;
-    unStakeNFT:(stakePubKey: PublicKey, nftPubKey: PublicKey) => Promise<boolean>;
-    redeemRewards:(stakePubKey: PublicKey) => Promise<boolean>;
-    redeemAllRewards:() => Promise<boolean>;
+    initState: (wallet: AnchorWallet, loadStats?: boolean) => Promise<boolean>;
+    stakeNFT: (nftPubKey: PublicKey) => Promise<boolean>;
+    unStakeNFT: (stakePubKey: PublicKey, nftPubKey: PublicKey) => Promise<boolean>;
+    redeemRewards: (stakePubKey: PublicKey) => Promise<boolean>;
+    redeemAllRewards: () => Promise<boolean>;
 }
 
 const useShantiesStore = create<UseShantiesStore>((set, get) => ({
@@ -51,7 +51,7 @@ const useShantiesStore = create<UseShantiesStore>((set, get) => ({
     stats: {} as ShantiesStats,
     getStats: async () => {
         const program = get().state.program;
-        const shantiesNfts = new NftsData(program,hashTable,legendariesHashTable, 6.9, 16.9);
+        const shantiesNfts = new NftsData(program, hashTable, legendariesHashTable, 6.9, 16.9);
         const totalStaked = await shantiesNfts.getTotalStakedNfts();
         const stakedNfts = await shantiesNfts.getWalletStakedNfts();
         const unStakedNfts = await shantiesNfts.getWalletUnStakedNfts();
@@ -64,13 +64,13 @@ const useShantiesStore = create<UseShantiesStore>((set, get) => ({
         });
         return true;
     },
-    initState: async (wallet: AnchorWallet, loadStats=false) => {
+    initState: async (wallet: AnchorWallet, loadStats = false) => {
         const connection = new anchor.web3.Connection(
             process.env.NEXT_PUBLIC_RPC_ENDPOINT as string,
             "processed" as ConfirmOptions
         );
 
-        const provider = new Provider(connection, wallet, "processed" as ConfirmOptions);
+        const provider = new anchor.AnchorProvider(connection, wallet, "processed" as ConfirmOptions);
         const program = getShantiesProgram(provider);
 
         const [jollyranch, jollyBump] =
@@ -111,7 +111,7 @@ const useShantiesStore = create<UseShantiesStore>((set, get) => ({
             },
         });
 
-        if(loadStats) {
+        if (loadStats) {
             await get().getStats();
         }
         return true
@@ -161,7 +161,7 @@ const useShantiesStore = create<UseShantiesStore>((set, get) => ({
             get().getStats();
             toast.success("Stake completed!");
             return true;
-        } catch (e:any) {
+        } catch (e: any) {
             console.log('error calling rpc stakeNft', e);
             toast.error(`Stake failed ${e?.message ? e.message : ''}`);
             return false;
@@ -202,7 +202,7 @@ const useShantiesStore = create<UseShantiesStore>((set, get) => ({
             get().getStats();
             toast.success("Unstake completed!");
             return true;
-        } catch (e:any) {
+        } catch (e: any) {
             console.log('error calling rpc unstakeNFT', e);
             toast.error(`UnStake failed ${e?.message ? e.message : ''}`);
             return false;
@@ -229,7 +229,7 @@ const useShantiesStore = create<UseShantiesStore>((set, get) => ({
             get().getStats();
             toast.success("Redeem rewards completed!");
             return true;
-        } catch (e:any) {
+        } catch (e: any) {
             console.log('error calling rpc redeemRewards', e);
             toast.error(`Redeem rewards failed ${e?.message ? e.message : ''}`);
             return false;
@@ -264,13 +264,13 @@ const useShantiesStore = create<UseShantiesStore>((set, get) => ({
                     });
                     tx.add(redeem);
                 }
-                await _state.program.provider.send(tx);
+                await _state.program.provider.sendAndConfirm(tx);
             }
             await timeout(300);
             get().getStats();
             toast.success("Redeem all rewards completed!");
             return true;
-        } catch (e:any) {
+        } catch (e: any) {
             console.log('error calling rpc redeemAllRewards', e);
             toast.error(`Redeem all rewards failed ${e?.message ? e.message : ''}`);
             return false;

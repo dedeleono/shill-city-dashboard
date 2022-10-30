@@ -1,11 +1,11 @@
-import {Program} from "@project-serum/anchor";
-import {getMetaplexToken} from "./token";
+import { Program } from "@project-serum/anchor";
+import { getMetaplexToken } from "./token";
 import * as anchor from "@project-serum/anchor";
-import {chunks} from "./common";
-import {AccountInfo, ConfirmOptions, Connection} from "@solana/web3.js";
+import { chunks } from "./common";
+import { AccountInfo, ConfirmOptions, Connection } from "@solana/web3.js";
 import axios from "axios";
-import {programs} from "@metaplex/js";
-import {TOKEN_PROGRAM_ID} from "@solana/spl-token";
+import { programs } from "@metaplex/js";
+import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 // @ts-ignore
 import RelativeTime from '@yaireo/relative-time'
 
@@ -30,7 +30,7 @@ export default class NftsData {
     redemptionRateLegendary: number;
     lockMultipliers: LockMultiplier[];
     groupMultipliers: GroupMultiplier[];
-    constructor (
+    constructor(
         program: Program,
         hashTable: string[],
         hashTableLegendaries: string[] = [],
@@ -89,7 +89,7 @@ export default class NftsData {
         // console.log("----------stakedNfts",stakedNfts);
         const stake_spls = await Promise.all(stakedNfts.map(async (nft_account) => {
             const keys = [nft_account.publicKey.toBuffer()];
-            if(nft_account.account.mints) {
+            if (nft_account.account.mints) {
                 // Needed for pets
                 keys.push(nft_account.account.mints[0].toBuffer());
             }
@@ -116,9 +116,9 @@ export default class NftsData {
                         ],
                     })
                     .then(async (res) => {
-                        if(res?.data?.result?.value?.length) {
+                        if (res?.data?.result?.value?.length) {
                             // Filter nulls first (user wallet may not be updated) and then map
-                            return res.data.result.value.filter((v:any) => v).map((v:any) => v.data.parsed.info.mint);
+                            return res.data.result.value.filter((v: any) => v).map((v: any) => v.data.parsed.info.mint);
                         } else {
                             return [];
                         }
@@ -132,7 +132,7 @@ export default class NftsData {
         // append stakedNfts data before returning
         return nftsData.map(nftData => {
             const stakeAccount = stakedNfts.find(stakedNft => {
-                if(stakedNft.account.mints) {
+                if (stakedNft.account.mints) {
                     // Needed for pets
                     return nftData.mint === stakedNft.account.mints[0].toString();
                 }
@@ -144,15 +144,15 @@ export default class NftsData {
             let lockMultiplier = null;
             let lockEndsIn = null;
             let redemptionRate = null;
-            if(stakeAccount) {
-                if(stakeAccount.account.endDate) {
+            if (stakeAccount) {
+                if (stakeAccount.account.endDate) {
                     const lockEndUnix = stakeAccount.account.endDate * 1000;
                     const lockStartUnix = stakeAccount.account.startDate * 1000;
                     const todayUnix = parseInt((new Date().getTime()).toFixed(0));
                     //const future = new Date();
                     //future.setDate(future.getDate() + 7);
                     //const futureUnix = parseInt((future.getTime()).toFixed(0));
-                    if( lockEndUnix > todayUnix) {
+                    if (lockEndUnix > todayUnix) {
                         isLocked = true;
                         const lockPeriodInDays = (lockEndUnix - lockStartUnix) / (1000 * 3600 * 24);
                         lockMultiplier = this.lockMultipliers.find(multiplier => multiplier.days === lockPeriodInDays);
@@ -161,23 +161,27 @@ export default class NftsData {
                     }
                 }
                 redemptionRate = nftData.redemptionRate;
-                if(redemptionRate) {
-                    if(lockMultiplier) {
+                if (redemptionRate) {
+                    if (lockMultiplier) {
                         redemptionRate = redemptionRate * lockMultiplier.multiplier;
                     }
-                    if(stakeAccount.account.stakeAmount) {
+                    if (stakeAccount.account.stakeAmount) {
                         // Needed for pets
                         const groupMultiplier = this.groupMultipliers.find(_groupMultiplier => _groupMultiplier.group === stakeAccount.account.stakeAmount);
-                        if(groupMultiplier) {
-                            redemptionRate = redemptionRate * (nftData.isLegendary? groupMultiplier.multiplierLegendary : groupMultiplier.multiplier);
+                        if (groupMultiplier) {
+                            redemptionRate = redemptionRate * (nftData.isLegendary ? groupMultiplier.multiplierLegendary : groupMultiplier.multiplier);
                         }
                     }
                     const currDate = new Date().getTime() / 1000;
                     const daysElapsed =
                         Math.abs(currDate - stakeAccount.account.startDate) /
                         (60 * 60 * 24);
-                    const amountRedeemed =
-                        stakeAccount.account.amountRedeemed.toNumber() / 1e6;
+                    console.log(stakeAccount.account);
+                    let amountRedeemed = 0;
+                    if (stakeAccount.account.amountRedeemed) {
+                        amountRedeemed =
+                            stakeAccount.account.amountRedeemed.toNumber() / 1e6;
+                    }
                     estimateRewards = redemptionRate * daysElapsed - amountRedeemed;
                 }
             }
@@ -197,10 +201,10 @@ export default class NftsData {
     async getTotalStakedNfts() {
         let totalStaked = 0;
         const stakes = await this.program.account.stake.all();
-        if(stakes[0] && stakes[0].account.stakeAmount) {
+        if (stakes[0] && stakes[0].account.stakeAmount) {
             stakes.map((stake) => {
                 if (stake.account.withdrawn === false) {
-                    for (let index = 0; index < stake.account.stakeAmount ; index++) {
+                    for (let index = 0; index < stake.account.stakeAmount; index++) {
                         totalStaked++;
                     }
                 }
@@ -210,7 +214,7 @@ export default class NftsData {
         }
         return totalStaked;
     }
-    private async getNftsData(mints:string[]) {
+    private async getNftsData(mints: string[]) {
         const metaplexToken = getMetaplexToken();
 
         const pdas = await Promise.all(mints.map(async mint => {
@@ -249,7 +253,7 @@ export default class NftsData {
             const uri = metadata.data.data.uri.replace("dweb.link", "infura-ipfs.io")
             const { data } = await axios.get(uri);
             let image = data?.image;
-            
+
             const isLegendary = this.hashTableLegendaries.includes(metadata.data.mint);
 
             return {

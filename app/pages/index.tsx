@@ -18,6 +18,7 @@ import ConnectDialog from "../components/shared/ConnectDialog";
 import CollectionSummary from "../components/CollectionSummary";
 import {RaffleType} from "../utils/raffle";
 import RaffleCard from "../components/RaffleCard";
+import useTarnishedStore from '../hooks/useTarnishedStore';
 function useRaffles () {
     const { data, error } = useSWR(`https://raffle.shill-city.com/api/raffle/all`,(apiPath: RequestInfo) => fetch(apiPath).then(res => res.json()));
 
@@ -44,6 +45,10 @@ export default function Home() {
     const initPfpState = usePfpStore((state) => state.initState);
     const getPfpStats = usePfpStore((state) => state.getStats);
     const pfpState = usePfpStore((state) => state.state);
+    // tarnished
+    const initTarnishedState = useTarnishedStore((state) => state.initState);
+    const getTarnishedStats = useTarnishedStore((state) => state.getStats);
+    const tarnishedState = useTarnishedStore((state) => state.state);
     // LP
     const tideState = useLPStore((state) => state.tideState);
     const psdnState = useLPStore((state) => state.psdnState);
@@ -61,6 +66,7 @@ export default function Home() {
             initShantiesState(wallet);
             initPetsState(wallet);
             initPfpState(wallet);
+            initTarnishedState(wallet);
             getSccStats(wallet);
             setupPoseidon(wallet);
             setupTide(wallet);
@@ -69,16 +75,17 @@ export default function Home() {
     }, [wallet]);
 
     useEffect(() => {
-        if(shantiesState?.program && pfpState?.program && petsState?.program && psdnState?.poseidon && tideState?.tide && pfpGameState?.program) {
+        if(shantiesState?.program && pfpState?.program && petsState?.program && psdnState?.poseidon && tideState?.tide && pfpGameState?.program && tarnishedState?.program) {
             getShantiesStats();
             getPetsStats();
             getPfpStats();
+            getTarnishedStats();
             getPsdnStats();
             getAccountStats();
             getTideStats();
             getPfpGameStats();
         }
-    }, [shantiesState, pfpState, petsState,psdnState, tideState, pfpGameState]);
+    }, [shantiesState, pfpState, petsState,psdnState, tideState, pfpGameState, tarnishedState]);
     return (
         <main
             style={{

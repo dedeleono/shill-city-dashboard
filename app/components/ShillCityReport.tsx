@@ -1,14 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import useShantiesStore from "../hooks/useShantiesStore";
 import usePfpStore from "../hooks/usePfpStore";
 import usePetsStore from "../hooks/usePetsStore";
+import useTarnishedStore from '../hooks/useTarnishedStore';
 
 export default function ShillCityReport() {
     const [totalGangs, setTotalGangs] = useState(undefined);
 
     const shantiesStats = useShantiesStore((state) => state.stats);
     const pfpStats = usePfpStore((state) => state.stats);
+    const tarnishedStats = useTarnishedStore((state) => state.stats);
     const petsStats = usePetsStore((state) => state.stats);
 
 
@@ -60,11 +62,11 @@ export default function ShillCityReport() {
                     <div className="mb-2">Inhabitants</div>
                     <div className="flex ml-2">
                         <div className="grow">Citizens Gen1</div>
-                        <div>{pfpStats?.totalStaked}/6666</div>
+                        <div>{pfpStats?.totalStaked}/{6666 - tarnishedStats?.totalStaked}</div>
                     </div>
                     <div className="flex ml-2">
-                        <div className="grow">Citizens Gen2</div>
-                        <div className="opacity-50">Unborn</div>
+                        <div className="grow">Citizens Gen2 (Tarnished)</div>
+                        <div className="">{tarnishedStats?.totalStaked}/6666</div>
                     </div>
                     <div className="flex ml-2">
                         <div className="grow">Pets</div>

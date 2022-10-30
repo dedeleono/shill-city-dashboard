@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import Image from "next/image";
 import Tooltip from "rc-tooltip";
@@ -9,14 +9,14 @@ interface CollectionStackProps {
     url: string,
     placeholderImage: string,
     description: string,
-    onRedeem:() => Promise<boolean>;
+    onRedeem: () => Promise<boolean>;
     stakedNfts: [
         {
             image: string,
             estimateRewards: number,
             stakeAccount: {
-                account : {
-                    stakeAmount?:number,
+                account: {
+                    stakeAmount?: number,
                 },
             },
         }
@@ -28,8 +28,8 @@ interface CollectionStackProps {
     ],
 }
 
-const CollectionStack :FC<CollectionStackProps> = (
-    {name,url,placeholderImage,description, stakedNfts, unStakedNfts,onRedeem}
+const CollectionStack: FC<CollectionStackProps> = (
+    { name, url, placeholderImage, description, stakedNfts, unStakedNfts, onRedeem }
 ) => {
     const [imageLoaded, setImageLoaded] = useState(false);
     const [isRedeeming, setIsRedeeming] = useState(false);
@@ -41,17 +41,17 @@ const CollectionStack :FC<CollectionStackProps> = (
 
     useEffect(() => {
         const nfts = [...stakedNfts, ...unStakedNfts];
-        if(nfts.length && coverImage === '') {
-            setCoverImage(nfts[Math.floor(Math.random()*nfts.length)].image);
+        if (nfts.length && coverImage === '') {
+            setCoverImage(nfts[Math.floor(Math.random() * nfts.length)].image);
         }
-        if(nfts.length > 1) {
+        if (nfts.length > 1) {
             // @ts-ignore
-            setThumbImages(nfts.slice(1,4).map(_nft => _nft.image));
+            setThumbImages(nfts.slice(1, 3).map(_nft => _nft.image));
         }
 
         let _totalStaked = 0;
 
-        if(stakedNfts[0] && stakedNfts[0].stakeAccount.account.stakeAmount) {
+        if (stakedNfts[0] && stakedNfts[0].stakeAccount.account.stakeAmount) {
             // Needed for pets
             stakedNfts.forEach((stake) => {
                 _totalStaked += stake.stakeAccount.account.stakeAmount || 1

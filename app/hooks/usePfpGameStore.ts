@@ -1,11 +1,11 @@
 import create from "zustand";
 import * as anchor from "@project-serum/anchor";
-import {ConfirmOptions, Connection, PublicKey} from "@solana/web3.js";
-import {Program, Provider} from "@project-serum/anchor";
-import {ASSOCIATED_TOKEN_PROGRAM_ID, Token, TOKEN_PROGRAM_ID} from "@solana/spl-token";
-import {getPfpProgram} from "../utils/pfp";
-import {AnchorWallet} from "@solana/wallet-adapter-react";
-import {getTrtnToken} from "../utils/token";
+import { ConfirmOptions, Connection, PublicKey } from "@solana/web3.js";
+import { Program, Provider } from "@project-serum/anchor";
+import { ASSOCIATED_TOKEN_PROGRAM_ID, Token, TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { getPfpProgram } from "../utils/pfp";
+import { AnchorWallet } from "@solana/wallet-adapter-react";
+import { getTrtnToken } from "../utils/token";
 import * as bs58 from "bs58";
 
 const opts = {
@@ -47,7 +47,7 @@ const usePfpGameStore = create<UsePfpGameStore>((set, get) => ({
     pfpGameState: {} as PfpGameState,
     pfpGameStats: {} as PfpGameStats,
     setupPfpGameState: async (wallet: AnchorWallet) => {
-        const provider = new Provider(connection, wallet, opts.preflightCommitment);
+        const provider = new anchor.AnchorProvider(connection, wallet, opts.preflightCommitment);
         const program = getPfpProgram(provider);
         const [jollyranch, jollyBump] =
             await anchor.web3.PublicKey.findProgramAddress(
@@ -105,7 +105,7 @@ const usePfpGameStore = create<UsePfpGameStore>((set, get) => ({
 
 
 
-async function getGangs(program: Program){
+async function getGangs(program: Program) {
     const gangsForOwner = await program.account.gang.all([
         {
             memcmp: {

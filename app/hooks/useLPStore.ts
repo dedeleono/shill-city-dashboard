@@ -2,7 +2,7 @@ import create from "zustand";
 import poseidonIDL from "../lib/idl/poseidon_idl.json";
 import tideIDL from "../lib/idl/tide_pool_idl.json";
 import * as anchor from "@project-serum/anchor";
-import {AccountInfo, ConfirmOptions, Connection, ParsedAccountData, PublicKey} from "@solana/web3.js";
+import { AccountInfo, ConfirmOptions, Connection, ParsedAccountData, PublicKey } from "@solana/web3.js";
 import { BN, Program, Provider } from "@project-serum/anchor";
 import { toast } from 'react-toastify';
 import {
@@ -11,7 +11,7 @@ import {
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import { AnchorWallet } from "@solana/wallet-adapter-react";
-import {getShellToken, getTrtnToken, getUsdcToken} from "../utils/token";
+import { getShellToken, getTrtnToken, getUsdcToken } from "../utils/token";
 
 type TideState = {
   program: PublicKey;
@@ -102,13 +102,13 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
       preflightCommitment: "processed" as ConfirmOptions,
     };
     const endpoint =
-    "https://bold-fragrant-cloud.solana-mainnet.quiknode.pro/6c6aa8c19e1c474208e30db3fa3a74c4a12ffff9/";
+      "https://bold-fragrant-cloud.solana-mainnet.quiknode.pro/6c6aa8c19e1c474208e30db3fa3a74c4a12ffff9/";
     const connection = new anchor.web3.Connection(
       endpoint,
       opts.preflightCommitment
     );
     const aWallet = wallet as typeof anchor.Wallet;
-    const provider = new Provider(
+    const provider = new anchor.AnchorProvider(
       connection,
       aWallet,
       opts.preflightCommitment
@@ -230,7 +230,7 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
       opts.preflightCommitment
     );
     const aWallet = wallet as typeof anchor.Wallet;
-    const provider = new Provider(
+    const provider = new anchor.AnchorProvider(
       connection,
       aWallet,
       opts.preflightCommitment
@@ -724,14 +724,14 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
   getAccountStats: async () => {
     const tokenAccounts = await get()
       .psdnState.program.provider.connection.getParsedTokenAccountsByOwner(get()
-        .psdnState.program.provider.wallet.publicKey, {programId: TOKEN_PROGRAM_ID});
+        .psdnState.program.provider.wallet.publicKey, { programId: TOKEN_PROGRAM_ID });
     let usdcBalance = 0;
     let shellBalance = 0;
     let trtnBalance = 0;
-    if(tokenAccounts?.value?.length) {
-      tokenAccounts.value.forEach((tokenAccount: { pubkey:PublicKey , account:AccountInfo<ParsedAccountData>}) => {
+    if (tokenAccounts?.value?.length) {
+      tokenAccounts.value.forEach((tokenAccount: { pubkey: PublicKey, account: AccountInfo<ParsedAccountData> }) => {
         const uiAmount = tokenAccount?.account?.data?.parsed?.info?.tokenAmount?.uiAmount || 0;
-        switch(tokenAccount.pubkey.toBase58()) {
+        switch (tokenAccount.pubkey.toBase58()) {
           case get().psdnState.walletUsdcAccount.toBase58():
             usdcBalance = uiAmount;
             break;
@@ -755,7 +755,7 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
 }));
 
 
-function  showRpcErrorMessage(e:unknown) {
+function showRpcErrorMessage(e: unknown) {
   toast.error("Transaction failed");
 }
 
@@ -764,4 +764,4 @@ function showRpcSuccessMessage() {
 }
 
 export default useLPStore;
-export class SlippageToHighError extends Error {}
+export class SlippageToHighError extends Error { }

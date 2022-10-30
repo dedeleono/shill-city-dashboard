@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import usePfpStore from "../hooks/usePfpStore";
 import useShantiesStore from "../hooks/useShantiesStore";
@@ -6,32 +6,40 @@ import usePetsStore from "../hooks/usePetsStore";
 import CollectionStack from "./CollectionStack";
 import CountUpValue from "./shared/CountUpValue";
 import useLPStore from "../hooks/useLPStore";
+import useTarnishedStore from '../hooks/useTarnishedStore';
 
 export default function CollectionSummary() {
     const stakedPfps = usePfpStore((state) => state.stats?.stakedNfts);
+    const stakedTarnisheds = useTarnishedStore((state) => state.stats?.stakedNfts);
     const stakedShanties = useShantiesStore((state) => state.stats?.stakedNfts);
     const stakedPets = usePetsStore((state) => state.stats?.stakedNfts);
     const unStakedPfps = usePfpStore((state) => state.stats?.unStakedNfts);
+    const unStakedTarnisheds = useTarnishedStore((state) => state.stats?.unStakedNfts);
     const unStakedShanties = useShantiesStore((state) => state.stats?.unStakedNfts);
     const unStakedPets = usePetsStore((state) => state.stats?.unStakedNfts);
     const psdnRatio = useLPStore((state => state.psdnRatio));
     const redeemPfpRewards = usePfpStore((state) => state.redeemAllRewards);
+    const redeemTarnishedRewards = useTarnishedStore((state) => state.redeemAllRewards);
     const redeemPetsRewards = usePetsStore((state) => state.redeemAllRewards);
     const redeemShantiesRewards = useShantiesStore((state) => state.redeemAllRewards);
-    const [dailyYield,setDailyYield] = useState(0);
+    const [dailyYield, setDailyYield] = useState(0);
     useEffect(() => {
-        if(stakedPfps && stakedShanties && stakedPets) {
-            const stakedNfts = [...stakedPfps,...stakedShanties,...stakedPets];
+        if (stakedPfps && stakedShanties && stakedPets && stakedTarnisheds) {
+            const stakedNfts = [...stakedPfps, ...stakedShanties, ...stakedPets, ...stakedTarnisheds];
             const _dailyYield = stakedNfts.map(
-                (_nft: {redemptionRate: number}) => _nft.redemptionRate
+                (_nft: { redemptionRate: number }) => _nft.redemptionRate
             ).reduce(
-                (_prevReRate:number, _curReRate:number) => _prevReRate + _curReRate, 0);
+                (_prevReRate: number, _curReRate: number) => _prevReRate + _curReRate, 0);
             setDailyYield(_dailyYield);
         }
-    }, [stakedPfps, stakedShanties,stakedPets])
+    }, [stakedPfps, stakedShanties, stakedPets, stakedTarnisheds])
 
     async function handleOnPfpRedeem() {
         return await redeemPfpRewards();
+    }
+
+    async function handleOnTarnishedRedeem() {
+        return await redeemTarnishedRewards();
     }
     async function handleOnPetsRedeem() {
         return await redeemPetsRewards();
@@ -53,7 +61,7 @@ export default function CollectionSummary() {
                             <div className="text-xl">
                                 <CountUpValue value={dailyYield} />
                                 {' '}TRTN{' '}
-                                (<CountUpValue prefix="$" className="text-lg" value={dailyYield*psdnRatio} />)
+                                (<CountUpValue prefix="$" className="text-lg" value={dailyYield * psdnRatio} />)
                             </div>
                         </div>
                         <div>
@@ -64,7 +72,7 @@ export default function CollectionSummary() {
                 </div>
             </div>
 
-            <div className="grid gap-3 pt-5 grid-cols-2 md:grid-cols-3">
+            <div className="grid gap-3 pt-5 grid-cols-2 md:grid-cols-4">
                 {stakedShanties && (
                     <CollectionStack
                         unStakedNfts={unStakedShanties}
@@ -94,6 +102,17 @@ export default function CollectionSummary() {
                         onRedeem={handleOnPfpRedeem}
                         name="Citizens"
                         url="https://citizens.shill-city.com/"
+                        placeholderImage={"/images/placeholder-citizens.png"}
+                        description="A deflationary collection of 6666 Crime lords fighting for control of the synthesized krill trade. Build your gang and send them on missions through our P2E Gamefied Staking platform."
+                    />
+                )}
+                {stakedTarnisheds && (
+                    <CollectionStack
+                        unStakedNfts={unStakedTarnisheds}
+                        stakedNfts={stakedTarnisheds}
+                        onRedeem={handleOnTarnishedRedeem}
+                        name="Tarnished"
+                        url="https://missions.shill-city.com/"
                         placeholderImage={"/images/placeholder-citizens.png"}
                         description="A deflationary collection of 6666 Crime lords fighting for control of the synthesized krill trade. Build your gang and send them on missions through our P2E Gamefied Staking platform."
                     />
