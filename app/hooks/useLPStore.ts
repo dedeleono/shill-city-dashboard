@@ -107,10 +107,10 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
       endpoint,
       opts.preflightCommitment
     );
-    const aWallet = wallet as typeof anchor.Wallet;
+
     const provider = new anchor.AnchorProvider(
       connection,
-      aWallet,
+      wallet,
       opts.preflightCommitment
     );
     const Poseidon = new anchor.web3.PublicKey(
@@ -229,10 +229,10 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
       endpoint,
       opts.preflightCommitment
     );
-    const aWallet = wallet as typeof anchor.Wallet;
+
     const provider = new anchor.AnchorProvider(
       connection,
-      aWallet,
+      wallet,
       opts.preflightCommitment
     );
     const TideProgram = new anchor.web3.PublicKey(
