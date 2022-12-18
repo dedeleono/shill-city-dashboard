@@ -138,7 +138,7 @@ const CollectionStack: FC<CollectionStackProps> = (
             {totalStaked > 0 ? (
                 <div onClick={handleOnRedeem} className={`btn btn-sm btn-outline mt-2 ${isRedeeming && 'loading'}`}>
                     <span>Redeem</span>
-                    {<CountUpValue className="mx-1" value={estimateRewards ? totalRewards * 2 : totalRewards} />}
+                    {<CountUpValue className="mx-1" value={estimateRewards ? (totalRewards * 2) : totalRewards} />}
                     <span>TRTN</span>
                 </div>
             ) : (
