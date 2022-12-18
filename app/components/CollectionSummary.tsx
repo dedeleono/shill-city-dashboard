@@ -108,6 +108,7 @@ export default function CollectionSummary() {
                 )}
                 {stakedTarnisheds && (
                     <CollectionStack
+                        estimateRewards={2}
                         unStakedNfts={unStakedTarnisheds}
                         stakedNfts={stakedTarnisheds}
                         onRedeem={handleOnTarnishedRedeem}

@@ -7,6 +7,7 @@ import CountUpValue from "./shared/CountUpValue";
 interface CollectionStackProps {
     name: string,
     url: string,
+    estimateRewards?: number;
     placeholderImage: string,
     description: string,
     onRedeem: () => Promise<boolean>;
@@ -29,7 +30,7 @@ interface CollectionStackProps {
 }
 
 const CollectionStack: FC<CollectionStackProps> = (
-    { name, url, placeholderImage, description, stakedNfts, unStakedNfts, onRedeem }
+    { name, url, placeholderImage, description, stakedNfts, unStakedNfts, onRedeem, estimateRewards }
 ) => {
     const [imageLoaded, setImageLoaded] = useState(false);
     const [isRedeeming, setIsRedeeming] = useState(false);
@@ -137,7 +138,7 @@ const CollectionStack: FC<CollectionStackProps> = (
             {totalStaked > 0 ? (
                 <div onClick={handleOnRedeem} className={`btn btn-sm btn-outline mt-2 ${isRedeeming && 'loading'}`}>
                     <span>Redeem</span>
-                    {<CountUpValue className="mx-1" value={totalRewards} />}
+                    {<CountUpValue className="mx-1" value={estimateRewards ? totalRewards * 2 : totalRewards} />}
                     <span>TRTN</span>
                 </div>
             ) : (

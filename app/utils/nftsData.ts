@@ -174,27 +174,22 @@ export default class NftsData {
                     if (lockMultiplier) {
                         redemptionRate = redemptionRate * lockMultiplier.multiplier;
                     }
-                    if (stakeAccount.account.stakeAmount) {
-                        // Needed for pets
-                        const groupMultiplier = this.groupMultipliers.find(_groupMultiplier => _groupMultiplier.group === stakeAccount.account.stakeAmount);
-                        if (groupMultiplier) {
-                            redemptionRate = redemptionRate * (nftData.isLegendary ? groupMultiplier.multiplierLegendary : groupMultiplier.multiplier);
-                        }
-                    }
                     const currDate = new Date().getTime() / 1000;
+                    let halvening1_start_time = 167000000;
 
-                    const daysElapsed =
-                        //@ts-ignore
-                        Math.abs(currDate - stakeAccount.account.startDate) /
-                        (60 * 60 * 24);
-                    console.log(stakeAccount.account);
-                    let amountRedeemed = 0;
-                    if (stakeAccount.account.amountRedeemed) {
-                        amountRedeemed =
-                            //@ts-ignore
-                            stakeAccount.account.amountRedeemed.toNumber() / 1e6;
+                    let to_days = 60 * 60 * 24;
+
+                    if (Math.abs(stakeAccount.account.startDate as number) > halvening1_start_time) {
+                        let day_dif = (currDate - Math.abs(stakeAccount.account.startDate as number))
+                        let days_elapsed = day_dif / to_days;
+                        estimateRewards = (nftData.redemptionRate /2) * days_elapsed;
+                    } else {
+                        let day_dif_after_halvening = (currDate - halvening1_start_time);
+                        let day_dif_before_halvening = (halvening1_start_time - Math.abs(stakeAccount.account.startDate as number));
+                        let days_elapsed_after_halvening = day_dif_after_halvening / to_days;
+                        let days_elapsed_before_halvening = day_dif_before_halvening / to_days;
+                        estimateRewards = (nftData.redemptionRate * days_elapsed_before_halvening) + ((nftData.redemptionRate /2) * days_elapsed_after_halvening);
                     }
-                    estimateRewards = redemptionRate * daysElapsed - amountRedeemed;
                 }
             }
             return {

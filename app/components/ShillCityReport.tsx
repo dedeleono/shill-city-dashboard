@@ -12,6 +12,7 @@ export default function ShillCityReport() {
     const pfpStats = usePfpStore((state) => state.stats);
     const tarnishedStats = useTarnishedStore((state) => state.stats);
     const petsStats = usePetsStore((state) => state.stats);
+    const state = useTarnishedStore((state) => state);
 
 
     useEffect(() => {
@@ -51,6 +52,7 @@ export default function ShillCityReport() {
                     <div className="flex ml-2">
                         <div className="grow">Shanties</div>
                         <div>{shantiesStats?.totalStaked}/3333</div>
+                        {console.log('a',state.state.programUpgrade)}
                     </div>
                     <div className="flex ml-2">
                         <div className="grow">Hotels</div>
